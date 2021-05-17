@@ -93,7 +93,7 @@ if [ $CUSTOM_LIST_FILE ]; then
         if [ $re == "" ]; then
             wget -O $customListFile $CUSTOM_LIST_FILE
         else
-            CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/pd.zwc365.com\/seturl\/https:\/\/&/g")"
+            CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
             wget -O $customListFile $CUSTOM_LIST_FILE
         fi
         echo "下载完成。"
@@ -139,7 +139,7 @@ else
         if [ $re == "" ]; then
             wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
         else
-            CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/pd.zwc365.com\/seturl\/https:\/\/&/g")"
+            CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
             wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
         fi
         echo "下载完成，开始执行..."

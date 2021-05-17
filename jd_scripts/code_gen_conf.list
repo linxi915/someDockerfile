@@ -1,13 +1,4 @@
-#格式为
-#互助类型-机器人ID-提交代码(根据bot作者配置得来)-活动脚本日志文件名-活动代码(根据bot作者配置得来)-查找互助码需要用到的定位字符串
-#长期活动示例
-#long-@TuringLabbot-jd_sgmh.log-sgmh-暂无
-#临时活动示例
-#temp-@TuringLabbot-jd_sgmh.log-sgmh-暂无
-#每天变化活动示例
-#daily-@TuringLabbot-jd_818.log-818-暂无
-
-#长期活动
+#==========================================期活动==========================================#
 #种豆得豆
 long-@TuringLabbot-/submit_activity_codes-jd_plantBean.log-bean-种豆得豆好友互助码】
 #东东农场
@@ -18,7 +9,6 @@ long-@TuringLabbot-/submit_activity_codes-jd_pet.log-pet-东东萌宠好友互�
 long-@TuringLabbot-/submit_activity_codes-jd_jdfactory.log-ddfactory-东东工厂好友互助码】
 #京喜工厂
 long-@TuringLabbot-/submit_activity_codes-jd_dreamFactory.log-jxfactory-京喜工厂好友互助码】
-
 #疯狂的JOY
 long-@LvanLamCommitCodeBot-/jdcrazyjoy-jd_crazy_joy.log-@N-crazyJoy任务好友互助码】
 #签到领现金
@@ -26,10 +16,12 @@ long-@LvanLamCommitCodeBot-/jdcrazyjoy-jd_crazy_joy.log-@N-crazyJoy任务好友�
 #京东赚赚
 long-@LvanLamCommitCodeBot-/jdzz-jd_jdzz.log-@N-京东赚赚好友互助码】
 
-#临时活动
+#==========================================短期活动==========================================#
 #闪购盲盒
 temp-@TuringLabbot-/submit_activity_codes-jd_sgmh.log-sgmh-闪购盲盒好友互助码】
 #东东健康社区
 temp-@TuringLabbot-/submit_activity_codes-jd_health.log-health-东东健康社区好友互助码】
 
-#每天变化活动
+
+#========================================每日提交活动========================================#
+#每日活动

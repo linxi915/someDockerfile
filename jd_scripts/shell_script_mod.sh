@@ -11,13 +11,11 @@ function addCron() {
                 continue
             else
                 jsname_log="$(echo $jsname | cut -d \. -f1)"
-                jsname_cn="$(cat /scripts/$jsname | grep -oE "/?/?new Env\('.*'\)" | cut -d\' -f2)"
-                [[ -z "$jsname_cn" ]] && jsname_cn="$(cat /scripts/$jsname | grep -oE "/?/?tag\=.*" | cut -d"=" -f2)"
-                [[ -z "$jsname_cn" ]] && jsname_cn=$jsname_log
+                jsname_cn="$(grep "new Env" /scripts/$jsname | awk -F "'|\"" '{print $2}' | head -1)"
+                [[ -z "$jsname_cn" ]] && jsname_cn="$(grep "cron" /scripts/$jsname | grep -oE "/?/?tag\=.*" | cut -d"=" -f2)"
+                [[ -z "$jsname_cn" ]] && jsname_cn="$jsname_log"
                 jscron="$(cat /scripts/$jsname | grep -oE "/?/?cron \".*\"" | cut -d\" -f2)"
-                if [ -z "$jscron" ]; then
-                    jscron="$(cat /scripts/$jsname | grep ^[0-9] | awk '{print $1,$2,$3,$4,$5}' | egrep -v "[a-zA-Z]|:|\." | sort | uniq | head -n 1)"
-                fi
+                [[ -z "$jscron" ]] && jscron="$(cat /scripts/$jsname | grep ^[0-9] | awk '{print $1,$2,$3,$4,$5}' | egrep -v "[a-zA-Z]|:|\." | sort | uniq | head -n 1)"
                 test -n "$jscron" && test -n "$jsname_cn" && echo "# $jsname_cn" >> $mergedListFile
                 test -n "$jscron" && echo "$jscron node /scripts/$jsname >> /scripts/logs/$jsname_log.log 2>&1" >> $mergedListFile
                 test -n "$jscron" && echo $jsname
@@ -27,7 +25,7 @@ function addCron() {
 }
 
 if [ $(grep -c "docker_entrypoint.sh" $mergedListFile) -eq '0' ]; then
-    wget -O /scripts/docker/remote_task.sh https://pd.zwc365.com/seturl/https://raw.githubusercontent.com/Aaron-lv/someDockerfile/master/jd_scripts/docker_entrypoint.sh
+    wget -O /scripts/docker/remote_task.sh https://ghproxy.com/https://raw.githubusercontent.com/Aaron-lv/someDockerfile/master/jd_scripts/docker_entrypoint.sh
     echo "# 远程定时任务" >> $mergedListFile
     echo "*/1 */1 * * * sh -x /scripts/docker/remote_task.sh >> /scripts/logs/remote_task.log 2>&1" >> $mergedListFile
     cat /scripts/docker/remote_task.sh > /scripts/docker/docker_entrypoint.sh
@@ -103,7 +101,7 @@ fi
 ## wget方式添加脚本
 ## 京东试用
 if [ $jd_try_ENABLE = "Y" ]; then
-    wget -O /scripts/jd_try.js https://pd.zwc365.com/seturl/https://raw.githubusercontent.com/ZCY01/daily_scripts/main/jd/jd_try.js
+    wget -O /scripts/jd_try.js https://ghproxy.com/https://raw.githubusercontent.com/ZCY01/daily_scripts/main/jd/jd_try.js
 fi
 
 ## 添加远程脚本定时

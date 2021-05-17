@@ -1,7 +1,7 @@
 #!/bin/sh
 
 mergedListFile="/scripts/docker/merged_list_file.sh"
-shareCodesUrl="https:\/\/pd.zwc365.com\/seturl\/https:\/\/raw.githubusercontent.com\/Aaron-lv\/updateTeam\/master\/shareCodes\\"
+shareCodesUrl="https:\/\/ghproxy.com\/https:\/\/raw.githubusercontent.com\/Aaron-lv\/updateTeam\/master\/shareCodes\\"
 shareCodesCfd="$shareCodesUrl/cfd.json"
 shareCodeszz="$shareCodesUrl/jd_zz.json"
 shareCodesCash="$shareCodesUrl/jd_updateCash.json"
