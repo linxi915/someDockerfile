@@ -111,11 +111,13 @@ if [ -n "$(ls /scripts/[a-z]*_*.js)" ]; then
 fi
 
 ## 复制passerby-b仓库脚本到运行目录并添加定时
-if [ -n "$(ls /passerby-b/[a-z]*_*.js)" ]; then
-    cp -rf /passerby-b/[a-z]*_*.js /scripts
-    echo -e "\n##############京东到家##############" >> $mergedListFile
-    echo "添加passerby-b仓库脚本,脚本列表:"
-    addCron
+if [ -d "/passerby-b/" ]; then
+    if [ -n "$(ls /passerby-b/[a-z]*_*.js)" ]; then
+        cp -rf /passerby-b/[a-z]*_*.js /scripts
+        echo -e "\n##############京东到家##############" >> $mergedListFile
+        echo "添加passerby-b仓库脚本,脚本列表:"
+        addCron
+    fi
 fi
 
 ## 复制挂载脚本到运行目录并添加定时
