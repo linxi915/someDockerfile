@@ -12,7 +12,7 @@ fi
 
 if [ -f "/telethon/jd_json.py" ]; then
     echo "脚本存在，配置启用脚本..."
-    eval $(ps -ef | grep "jd_json" | grep -v "grep" | awk '{print "kill "$1}')
+    sleep 60 && eval $(ps -ef | grep "jd_json" | grep -v "grep" | awk '{print "kill "$1}')
     python3 -u /telethon/jd_json.py |ts >> /logs/jd_json.log 2>&1 &
     echo "脚本执行完成..."
 else
