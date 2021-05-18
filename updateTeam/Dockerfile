@@ -12,6 +12,7 @@ RUN set -ex \
         && apk add --no-cache tzdata git nodejs moreutils npm curl jq openssh-client \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
+        && npm config set registry https://registry.npm.taobao.org \
         && git config --global url."git@git.zhlh6.cn:".insteadOf "git@github.com:" \
         && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/" \
         && mkdir -p /root/.ssh \

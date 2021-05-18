@@ -9,6 +9,7 @@ RUN set -ex \
         && apk add --no-cache tzdata moreutils git nodejs npm curl jq \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
+        && npm config set registry https://registry.npm.taobao.org \
         && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/"
 
 RUN mkdir /logs \

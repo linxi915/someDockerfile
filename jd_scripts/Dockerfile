@@ -1,4 +1,5 @@
-FROM alpine
+FROM node:lts-alpine3.12
+
 LABEL AUTHOR="none" \
         VERSION=0.1.5
 
@@ -10,9 +11,10 @@ ENV DEFAULT_LIST_FILE=crontab_list.sh \
 
 RUN set -ex \
         && apk update && apk upgrade \
-        && apk add --no-cache tzdata git nodejs moreutils npm curl jq python3 py3-pip py3-cryptography py3-numpy py-pillow \
+        && apk add --no-cache tzdata git moreutils curl jq python3 py3-pip py3-cryptography py3-numpy py-pillow \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
+        && npm config set registry https://registry.npm.taobao.org \
         && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/"
 
 RUN git clone -b $REPO_BRANCH $REPO_URL /scripts \
@@ -29,7 +31,8 @@ RUN mkdir /jds \
         && git pull origin master --rebase
 
 RUN cp /jds/jd_scripts/docker_entrypoint.sh /usr/local/bin \
-        && chmod +x /usr/local/bin/docker_entrypoint.sh
+        && chmod +x /usr/local/bin/docker_entrypoint.sh \
+        && rm /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /scripts
 
