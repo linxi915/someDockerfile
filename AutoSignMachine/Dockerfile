@@ -16,7 +16,7 @@ RUN git clone https://github.com/GitHub-Xzhi/AutoSignMachine /AutoSignMachine \
         && cd /AutoSignMachine \
         && npm install
 
-RUN git clone https://github.com/srcrs/UnicomTask /UnicomTask \
+RUN git clone -b main https://github.com/OneYX/UnicomTask /UnicomTask \
         && cd /UnicomTask \
         && pip3 install --upgrade pip \
         && pip3 install -r requirements.txt

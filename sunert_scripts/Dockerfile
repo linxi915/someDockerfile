@@ -21,7 +21,7 @@ RUN mkdir /logs \
         && echo sunert_scripts >> /pss/.git/info/sparse-checkout \
         && git pull origin master --rebase
 
-RUN git clone https://gitee.com/Sunert/Scripts /Scripts \
+RUN git clone https://github.com/Sunert/Script /Scripts \
         && cd /Scripts \
         && git checkout master \
         && npm install
