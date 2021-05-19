@@ -43,7 +43,7 @@ if [ $(grep -c "docker_entrypoint.sh" $mergedListFile) -eq '0' ]; then
     echo "合并后的定时任务文件，未包含必须的默认定时任务，增加默认定时任务..."
     echo "" >>$mergedListFile
     echo "# 默认定时任务" >>$mergedListFile
-    echo "1 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
+    echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
 else
     echo "合并后的定时任务文件，已包含必须的默认定时任务，跳过执行..."
 fi
@@ -54,5 +54,8 @@ sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 echo "第6步加载最新的定时任务文件..."
 crontab $mergedListFile
 
-echo "第7步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
-cat /jds/updateTeam/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
+echo "第7步将仓库的 scripts_update.sh 脚本更新至系统 /usr/local/bin/upload 内..."
+cat /jds/updateTeam/scripts_update.sh > /usr/local/bin/upload
+
+echo "第8步将仓库的 docker_entrypoint.sh 脚本更新至系统 /usr/local/bin/docker_entrypoint.sh 内..."
+cat /jds/updateTeam/docker_entrypoint.sh > /usr/local/bin/docker_entrypoint.sh

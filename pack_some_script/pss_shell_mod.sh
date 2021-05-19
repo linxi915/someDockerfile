@@ -7,7 +7,7 @@ function initBaidu() {
     mkdir /baidu_speed
     cd /baidu_speed
     git init
-    git remote add origin https://gitee.com/Sunert/Scripts
+    git remote add origin https://github.com/Sunert/Script
     git config core.sparsecheckout true
     echo package.json >>/baidu_speed/.git/info/sparse-checkout
     echo Task/baidu_speed.js >>/baidu_speed/.git/info/sparse-checkout
