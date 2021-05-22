@@ -167,7 +167,7 @@ echo "第6步判断是否配置了随即延迟参数..."
 if [ $RANDOM_DELAY_MAX ]; then
     if [ $RANDOM_DELAY_MAX -ge 1 ]; then
         echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-        sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car.js\|jd_car_exchange.js\|jd_shop_sign.js\|monk_inter_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js\|my_redrain.js/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
+        sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car.js\|jd_car_exchange.js\|jd_shop_sign.js\|monk_inter_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js$MY_RANDOM/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
     fi
 else
     echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
@@ -198,14 +198,13 @@ if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
     echo "bot交互与spnode前置条件成立，替换任务列表的node指令为spnode"
     sed -i "/jddj_/!s/ node / spnode /g" $mergedListFile
     sed -i "/jd_blueCoin.js\|jd_joy_reward.js/s/spnode/spnode conc/g" $mergedListFile
+    if [ -f "/jds/jd_scripts/code_gen_conf.list" ]; then
+        echo "生成互助消息需要使用的 logs/code_gen_conf.list 文件..."
+        CODE_GEN_CONF=/scripts/logs/code_gen_conf.list
+        cp -f /jds/jd_scripts/code_gen_conf.list $CODE_GEN_CONF
+    fi
 fi
 crontab $mergedListFile
 
-echo "第11步生成互助消息需要使用的 logs/code_gen_conf.list 文件..."
-if [ -f "/jds/jd_scripts/code_gen_conf.list" ]; then
-    CODE_GEN_CONF=/scripts/logs/code_gen_conf.list
-    cp -f /jds/jd_scripts/code_gen_conf.list $CODE_GEN_CONF
-fi
-
-echo "第12步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
+echo "第11步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
 cat /scripts/docker/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
