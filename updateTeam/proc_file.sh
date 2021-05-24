@@ -27,7 +27,7 @@ fi
 ##京喜工厂自动开团
 if [ $jd_jxFactoryCreateTuan_ENABLE = "Y" ]; then
     echo "# 京喜工厂自动开团" >> $mergedListFile
-    echo "0 * * * * cd /scripts && node jd_jxFactoryCreateTuan.js >> logs/jd_jxFactoryCreateTuan.log 2>&1 && upload" >> $mergedListFile
+    echo "0 0-4/1 * * * cd /scripts && node jd_jxFactoryCreateTuan.js >> logs/jd_jxFactoryCreateTuan.log 2>&1 && upload" >> $mergedListFile
 fi
 
 ##更新抢京豆邀请码
@@ -45,7 +45,7 @@ fi
 ##京喜财富岛
 if [ $jd_updateCfd_ENABLE = "Y" ]; then
     echo "# 京喜财富岛" >> $mergedListFile
-    echo "0-3 0 * * * cd /scripts && node jd_updateCfd.js >> logs/jd_updateCfd.log 2>&1 && upload" >> $mergedListFile
+    echo "0-3/1 0,7 * * * cd /scripts && node jd_updateCfd.js >> logs/jd_updateCfd.log 2>&1 && upload" >> $mergedListFile
 fi
 
 ##更新东东小窝邀请码
@@ -57,5 +57,5 @@ fi
 ##赚京豆小程序
 if [ $jd_zzUpdate_ENABLE = "Y" ]; then
     echo "# 赚京豆小程序" >> $mergedListFile
-    echo "*/20 0-2 * * * cd /scripts && node jd_zzUpdate.js >> logs/jd_zzUpdate.log 2>&1 && upload" >> $mergedListFile
+    echo "*/20 0-2/1 * * * cd /scripts && node jd_zzUpdate.js >> logs/jd_zzUpdate.log 2>&1 && upload" >> $mergedListFile
 fi
