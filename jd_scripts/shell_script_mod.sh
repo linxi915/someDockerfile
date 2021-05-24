@@ -91,7 +91,7 @@ fi
 
 ## 删除不运行脚本
 if [ -n "$(ls /scripts/[!jA-Z]*_*.js)" ]; then
-    js_del="z_health_energy&z_marketLottery&z_mother_jump.js&z_shake&z_xmf&jx_cfdtx"
+    js_del="z_carnivalcity&z_city_cash&z_health_energy&z_marketLottery&z_mother_jump&z_shake&z_xmf&jx_cfdtx"
     arr=${js_del//&/ }
     for item in $arr; do
         rm -rf /scripts/$item.js
