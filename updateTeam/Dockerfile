@@ -25,6 +25,7 @@ RUN git clone -b $REPO_BRANCH $REPO_URL /updateTeam_scripts \
         && cp /updateTeam_scripts/*.* /scripts \
         && cd /scripts \
         && mkdir logs \
+        && sed -i 's/"request": "^2.88.2"/&,\n    "qiniu": "^7.3.3"/g' /scripts/package.json \
         && npm install
 
 RUN mkdir /jds \

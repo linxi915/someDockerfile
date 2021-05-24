@@ -22,6 +22,7 @@ echo "复制脚本到运行目录..."
 rm -rf /scripts/*.*
 cp -f /updateTeam_scripts/*.* /scripts
 echo "npm install 安装最新依赖..."
+sed -i 's/"request": "^2.88.2"/&,\n    "qiniu": "^7.3.3"/g' /scripts/package.json
 npm install --loglevel error --prefix /scripts
 
 cd /jds

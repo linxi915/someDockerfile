@@ -23,7 +23,6 @@ if [ $CUSTOM_LIST_FILE ]; then
     if [ -f "$customListFile" ]; then
         if [ $CUSTOM_LIST_MERGE_TYPE == "append" ]; then
             echo "合并默认定时任务文件：$DEFAULT_LIST_FILE 和 自定义定时任务文件：$CUSTOM_LIST_FILE"
-            echo -e "" >>$mergedListFile
             cat $customListFile >>$mergedListFile
         elif [ $CUSTOM_LIST_MERGE_TYPE == "overwrite" ]; then
             echo "配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
