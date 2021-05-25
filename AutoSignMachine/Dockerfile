@@ -9,14 +9,13 @@ RUN set -ex \
         && apk add --no-cache tzdata git nodejs moreutils npm python3-dev py3-pip g++ libxslt-dev libxml2-dev jq curl \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
-        && npm config set registry https://registry.npm.taobao.org \
         && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/"
 
 RUN git clone https://github.com/GitHub-Xzhi/AutoSignMachine /AutoSignMachine \
         && cd /AutoSignMachine \
         && npm install
 
-RUN git clone -b main https://github.com/OneYX/UnicomTask /UnicomTask \
+RUN git clone -b main https://github.com/jianglin521/UnicomTask2 /UnicomTask \
         && cd /UnicomTask \
         && pip3 install --upgrade pip \
         && pip3 install -r requirements.txt
