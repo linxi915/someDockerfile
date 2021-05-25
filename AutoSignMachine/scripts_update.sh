@@ -9,15 +9,6 @@ git pull origin main --rebase
 echo "安装最新依赖..."
 npm install --loglevel error --prefix /AutoSignMachine
 
-cd /UnicomTask
-echo "更新AutoSignMachine仓库脚本..."
-git reset --hard
-git pull origin main --rebase
-echo "安装最新依赖..."
-pip3 install --upgrade pip
-pip3 install -r requirements.txt
-
-
 if [ $ENABLE_52POJIE ]; then
     echo "10 13 * * * node /AutoSignMachine/index.js 52pojie --htVD_2132_auth=${htVD_2132_auth} --htVD_2132_saltkey=${htVD_2132_saltkey} >> /logs/52pojie.log 2>&1 &" >>$mergedListFile
 else
@@ -54,11 +45,4 @@ if [ $ENABLE_UNICOM ]; then
         i=$(expr $i + 1)
         echo "*/20 6-23 * * * cd /$sub_dir && node index.js unicom >> /logs/unicom${username:0:4}.log 2>&1 &" >>$mergedListFile
     done
-fi
-
-if [ $ENABLE_UNICOMTASK ]; then
-    cp -f $USERS_COVER /UnicomTask/config.json
-    echo "30 6 * * * cd /UnicomTask && python3 -u main.py >> /logs/UnicomTask.log 2>&1 &" >>$mergedListFile
-else
-    echo "未配置启用UnicomTask签到任务环境变量ENABLE_UNICOMTASK，故不添加UnicomTask定时任务..."
 fi
