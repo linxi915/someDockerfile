@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 
+if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
+    if [ -d "/data" ]; then
+        if [ -f "/data/env.sh" ]; then
+            echo "检测到环境变量配置文件 /data/env.sh 存在，使用该文件内环境变量..."
+            source "/data/env.sh"
+        fi
+    fi
+fi
+
 function initPythonEnv() {
     echo "开始安装运行jd_bot需要的python环境及依赖..."
     sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
@@ -15,34 +24,9 @@ function initPythonEnv() {
 #启动tg bot交互前置条件成立，开始安装配置环境
 if [ "$1" == "True" ]; then
     initPythonEnv
+
     if [ -z "$DISABLE_SPNODE" ]; then
-        echo "增加命令组合spnode ，使用该命令spnode jd_xxxx.js 执行js脚本会读取cookies.conf里面的jd cokie账号来执行脚本"
-        (
-            cat <<EOF
-#!/bin/sh
-set -e
-first=\$1
-cmd=\$*
-echo \${cmd/\$1/}
-if [ \$1 == "conc" ]; then
-    for job in \$(cat \$COOKIES_LIST | grep -v "#" | paste -s -d ' '); do
-        { export JD_COOKIE=\$job && node \${cmd/\$1/}
-        }&
-    done
-elif [ -n "\$(echo \$first | sed -n "/^[0-9]\+\$/p")" ]; then
-    echo "\$(echo \$first | sed -n "/^[0-9]\+\$/p")"
-    { export JD_COOKIE=\$(sed -n "\${first}p" \$COOKIES_LIST) && node \${cmd/\$1/}
-    }&
-elif [ -n "\$(cat \$COOKIES_LIST  | grep "pt_pin=\$first")" ];then
-    echo "\$(cat \$COOKIES_LIST  | grep "pt_pin=\$first")"
-    { export JD_COOKIE=\$(cat \$COOKIES_LIST | grep "pt_pin=\$first") && node \${cmd/\$1/}
-    }&
-else
-    { export JD_COOKIE=\$(cat \$COOKIES_LIST | grep -v "#" | paste -s -d '&') && node \$*
-    }&
-fi
-EOF
-        ) > /usr/local/bin/spnode
+        cp -f /jds/jd_scripts/shell_spnode.sh /usr/local/bin/spnode
         chmod +x /usr/local/bin/spnode
     fi
 
@@ -50,13 +34,13 @@ EOF
     if [ -z "$JD_COOKIE" ]; then
         if [ ! -f "$COOKIES_LIST" ]; then
             echo "" > $COOKIES_LIST
-            echo "未配置JD_COOKIE环境变量，$COOKIES_LIST文件已生成,请将cookies写入$COOKIES_LIST文件，格式每个Cookie一行"
+            echo "未配置JD_COOKIE环境变量，$COOKIES_LIST 文件已生成,请将cookies写入 $COOKIES_LIST 文件，格式每个Cookie一行"
         fi
     else
         if [ -f "$COOKIES_LIST" ]; then
-            echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改$COOKIES_LIST文件内容"
+            echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改 $COOKIES_LIST 文件内容"
         else
-            echo "环境变量 cookies写入$COOKIES_LIST文件,如果需要更新cookie请修改cookies.conf文件内容"
+            echo "环境变量 cookies写入 $COOKIES_LIST 文件,如果需要更新cookie请修改cookies.conf文件内容"
             echo $JD_COOKIE | sed "s/[ &]/\\n/g" | sed "/^$/d" >$COOKIES_LIST
         fi
     fi
@@ -74,7 +58,7 @@ cat $defaultListFile >$mergedListFile
 
 echo "第2步判断是否存在自定义任务任务列表并追加..."
 if [ $CUSTOM_LIST_FILE ]; then
-    echo "您配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
+    echo "您配置了自定义任务文件： $CUSTOM_LIST_FILE ，自定义任务类型为： $CUSTOM_LIST_MERGE_TYPE"
     customListFile="/scripts/docker/custom_list_file.sh"
     if expr "$CUSTOM_LIST_FILE" : 'http.*' &>/dev/null; then
         echo "自定义任务文件为远程脚本，开始下载自定义远程任务..."
@@ -89,24 +73,27 @@ if [ $CUSTOM_LIST_FILE ]; then
     elif [ -f /scripts/docker/$CUSTOM_LIST_FILE ]; then
         echo "自定义任务文件为本地挂载。"
         cp -f /scripts/docker/$CUSTOM_LIST_FILE $customListFile
+    elif [ -f /data/$CUSTOM_LIST_FILE ]; then
+        echo "自定义任务文件为本地挂载。"
+        cp -f /data/$CUSTOM_LIST_FILE $customListFile
     fi
 
     if [ -f "$customListFile" ]; then
         if [ $CUSTOM_LIST_MERGE_TYPE == "append" ]; then
-            echo "合并默认定时任务文件：$DEFAULT_LIST_FILE 和 自定义定时任务文件：$CUSTOM_LIST_FILE"
+            echo "合并默认定时任务文件： $DEFAULT_LIST_FILE 和 自定义定时任务文件： $CUSTOM_LIST_FILE"
             echo -e "" >>$mergedListFile
             cat $customListFile >>$mergedListFile
         elif [ $CUSTOM_LIST_MERGE_TYPE == "overwrite" ]; then
-            echo "配置了自定义任务文件：$CUSTOM_LIST_FILE，自定义任务类型为：$CUSTOM_LIST_MERGE_TYPE..."
+            echo "配置了自定义任务文件： $CUSTOM_LIST_FILE ，自定义任务类型为： $CUSTOM_LIST_MERGE_TYPE"
             cat $customListFile >$mergedListFile
         else
-            echo "配置配置了错误的自定义定时任务类型：$CUSTOM_LIST_MERGE_TYPE，自定义任务类型为只能为append或者overwrite..."
+            echo "配置配置了错误的自定义定时任务类型： $CUSTOM_LIST_MERGE_TYPE ，自定义任务类型为只能为append或者overwrite..."
         fi
     else
-        echo "配置的自定义任务文件：$CUSTOM_LIST_FILE未找到，使用默认配置$DEFAULT_LIST_FILE..."
+        echo "配置的自定义任务文件： $CUSTOM_LIST_FILE 未找到，使用默认配置 $DEFAULT_LIST_FILE"
     fi
 else
-    echo "当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE ..."
+    echo "当前只使用了默认定时任务文件 $DEFAULT_LIST_FILE"
 fi
 
 echo "第3步判断是否配置了默认定时任务..."
@@ -149,14 +136,14 @@ else
     fi
 fi
 
-echo "第5步执行proc_file.sh脚本任务..."
+echo "第5步执行 proc_file.sh 脚本任务..."
 sh /jds/jd_scripts/proc_file.sh
 
 echo "第6步判断是否配置了随即延迟参数..."
 if [ $RANDOM_DELAY_MAX ]; then
     if [ $RANDOM_DELAY_MAX -ge 1 ]; then
         echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-        sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car.js\|jd_car_exchange.js\|jd_shop_sign.js\|monk_inter_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js\|jd_carnivalcity.js\|jd_xtg.js$MY_RANDOM/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
+        sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car.js\|jd_car_exchange.js\|jd_shop_sign.js\|monk_inter_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_xtg_help.js$MY_RANDOM/!s/node/sleep \$((RANDOM % \$RANDOM_DELAY_MAX)); node/g" $mergedListFile
     fi
 else
     echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
@@ -184,16 +171,44 @@ sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 echo "第10步加载最新的定时任务文件..."
 if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
-    echo "bot交互与spnode前置条件成立，替换任务列表的node指令为spnode"
+    echo "bot交互与spnode前置条件成立，替换任务列表的 node 指令为 spnode "
     sed -i "/jddj_/!s/ node / spnode /g" $mergedListFile
     sed -i "/jd_blueCoin.js\|jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js/s/spnode/spnode conc/g" $mergedListFile
-    if [ -f "/jds/jd_scripts/code_gen_conf.list" ]; then
-        echo "生成互助消息需要使用的 logs/code_gen_conf.list 文件..."
-        CODE_GEN_CONF=/scripts/logs/code_gen_conf.list
-        cp -f /jds/jd_scripts/code_gen_conf.list $CODE_GEN_CONF
-    fi
+    CMD="spnode"
+else
+    CMD="node"
 fi
 crontab $mergedListFile
 
-echo "第11步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
+echo "第11步处理jd_crazy_joy_coin任务..."
+if [ ! $CRZAY_JOY_COIN_ENABLE ]; then
+   echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
+   eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
+   echo '' >/scripts/logs/jd_crazy_joy_coin.log
+   $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+   echo "默认jd_crazy_joy_coin,重启完成"
+else
+   if [ $CRZAY_JOY_COIN_ENABLE = "Y" ]; then
+      echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
+      eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
+      echo '' >/scripts/logs/jd_crazy_joy_coin.log
+      $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+      echo "配置jd_crazy_joy_coin,重启完成"
+   else
+      eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
+      echo "已配置不启用jd_crazy_joy_coin任务,不处理"
+   fi
+fi
+
+echo "第12步将仓库的 docker_entrypoint.sh 脚本更新至系统 /usr/local/bin/docker_entrypoint.sh 内..."
 cat /jds/jd_scripts/docker_entrypoint.sh > /usr/local/bin/docker_entrypoint.sh
+
+if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
+    echo "第13步将仓库的 shell_spnode.sh 脚本更新至系统 /usr/local/bin/spnode 内..."
+    cat /jds/jd_scripts/shell_spnode.sh > /usr/local/bin/spnode
+    if [ -f "/jds/jd_scripts/code_gen_conf.list" ]; then
+        echo "第14步生成互助消息需要使用的 code_gen_conf.list 文件..."
+        [[ -z $GEN_CODE_LIST ]] && GEN_CODE_LIST="/scripts/logs/code_gen_conf.list"
+        cp -f /jds/jd_scripts/code_gen_conf.list $GEN_CODE_LIST
+    fi
+fi

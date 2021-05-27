@@ -9,33 +9,6 @@ shareCodesBeanHome="$shareCodesUrl/jd_updateBeanHome.json"
 shareCodesFactoryTuanId="$shareCodesUrl/jd_updateFactoryTuanId.json"
 shareCodesSmallHomeInviteCode="$shareCodesUrl/jd_updateSmallHomeInviteCode.json"
 
-if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
-   CMD="spnode"
-else
-   CMD="node"
-fi
-
-echo "处理jd_crazy_joy_coin任务..."
-if [ ! $CRZAY_JOY_COIN_ENABLE ]; then
-   echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
-   eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-   echo '' >/scripts/logs/jd_crazy_joy_coin.log
-   $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
-   echo "默认jd_crazy_joy_coin,重启完成"
-else
-   if [ $CRZAY_JOY_COIN_ENABLE = "Y" ]; then
-      echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
-      eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-      echo '' >/scripts/logs/jd_crazy_joy_coin.log
-      $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
-      echo "配置jd_crazy_joy_coin,重启完成"
-   else
-      eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-      echo "已配置不启用jd_crazy_joy_coin任务,不处理"
-   fi
-fi
-
-
 ## 修改京喜财富岛定时
 sed -i "/jd_cfd.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_cfd.js | awk '{print $1,$2,$3,$4,$5}')/10 *\/2 * * */g" $mergedListFile
 ## 修改闪购盲盒定时
