@@ -208,7 +208,7 @@ if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
     cat /jds/jd_scripts/shell_spnode.sh > /usr/local/bin/spnode
     if [ -f "/jds/jd_scripts/code_gen_conf.list" ]; then
         echo "第14步生成互助消息需要使用的 code_gen_conf.list 文件..."
-        [[ -z $GEN_CODE_LIST ]] && GEN_CODE_LIST="/scripts/logs/code_gen_conf.list"
-        cp -f /jds/jd_scripts/code_gen_conf.list $GEN_CODE_LIST
+        [[ -z $GEN_CODE_CONF ]] && GEN_CODE_CONF="/scripts/logs/code_gen_conf.list"
+        cp -f /jds/jd_scripts/code_gen_conf.list $GEN_CODE_CONF
     fi
 fi

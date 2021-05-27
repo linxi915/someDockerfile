@@ -15,6 +15,9 @@ function syncRepo() {
 #获取配置的自定义参数
 if [ "$1" ]; then
     run_cmd=$1
+    if [ -f "/data/env.sh" ]; then
+        source "/data/env.sh"
+    fi
 fi
 
 [ -f /scripts/package.json ] && before_package_json="$(cat /scripts/package.json)"
