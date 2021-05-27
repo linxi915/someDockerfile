@@ -1,50 +1,53 @@
 #!/bin/sh
-set -e
+
+function syncRepo() {
+    cd /scripts
+    echo "设定远程仓库地址..."
+    git remote set-url origin $REPO_URL
+    echo "git pull拉取最新代码..."
+    git reset --hard
+    git pull --rebase
+    git -C /jds reset --hard
+    git -C /jds pull origin master --rebase
+}
 
 #获取配置的自定义参数
-if [ -n "$1" ]; then
+if [ "$1" ]; then
     run_cmd=$1
 fi
 
-(
-echo "设定远程仓库地址..."
-cd /scripts
-git remote set-url origin $REPO_URL
-echo "git pull拉取最新代码..."
-git -C /scripts reset --hard
-git -C /scripts pull origin $REPO_BRANCH --rebase
-echo "npm install 安装最新依赖..."
-npm install --loglevel error --prefix /scripts
+[ -f /scripts/package.json ] && before_package_json="$(cat /scripts/package.json)"
 
-function initjds() {
-    mkdir /jds
-    cd /jds
-    git init
-    git remote add origin https://github.com/Aaron-lv/someDockerfile
-    git config core.sparsecheckout true
-    echo jd_scripts >> /jds/.git/info/sparse-checkout
-    git pull origin master --rebase
-}
-
-if [ ! -d "/jds/" ]; then
-    echo "未检查到jds仓库，初始化下载..."
-    initjds
+syncRepo
+if [ $? -ne 0 ]; then
+    echo "更新仓库代码出错❌，跳过"
 else
-    echo "更新jds仓库文件..."
-    git -C /jds reset --hard
-    git -C /jds pull origin master --rebase
+    echo "更新仓库代码成功✅"
 fi
 
-echo "替换执行文件..."
-if [ -n "$(ls /jds/jd_scripts/)" ]; then
-    jds_cp="default_task.sh&docker_entrypoint.sh&proc_file.sh"
-    arr=${jds_cp//&/ }
-    for item in $arr; do
-        cp -f /jds/jd_scripts/$item /scripts/docker
-    done
+if [ ! -d /scripts/node_modules ]; then
+    echo "容器首次启动，执行npm install..."
+    npm install --loglevel error --prefix /scripts
+    if [ $? -ne 0 ]; then
+        echo "npm首次启动安装依赖失败❌，exit，restart"
+        exit 1
+    else
+        echo "npm首次启动安装依赖成功✅"
+    fi
+else
+    if [[ "${before_package_json}" != "$(cat /scripts/package.json)" ]]; then
+        echo "package.json有更新，执行npm install..."
+        npm install --loglevel error --prefix /scripts
+        if [ $? -ne 0 ]; then
+            echo "npackage.json有更新，执行安装依赖失败❌，跳过"
+            exit 1
+        else
+            echo "npackage.json有更新，执行安装依赖成功✅"
+        fi
+    else
+        echo "package.json无变化，跳过npm install..."
+    fi
 fi
-echo "替换完成。"
-) || exit 0
 
 #默认启动telegram交互机器人的条件
 #确认容器启动时调用的docker_entrypoint.sh
@@ -58,7 +61,13 @@ else
 fi
 
 echo "------------------------------------------------执行定时任务任务shell脚本------------------------------------------------"
-sh -x /scripts/docker/default_task.sh $ENABLE_BOT_COMMAND $run_cmd
+sh /jds/jd_scripts/default_task.sh $ENABLE_BOT_COMMAND $run_cmd
+if [ $? -ne 0 ]; then
+    echo "定时任务任务shell脚本执行失败❌，exit，restart"
+    exit 1
+else
+    echo "定时任务任务shell脚本执行成功✅"
+fi
 echo "--------------------------------------------------默认定时任务执行完成---------------------------------------------------"
 
 if [ -n "$run_cmd" ]; then

@@ -24,13 +24,6 @@ function addCron() {
     done
 }
 
-if [ $(grep -c "docker_entrypoint.sh" $mergedListFile) -eq '0' ]; then
-    wget -O /scripts/docker/remote_task.sh https://ghproxy.com/https://raw.githubusercontent.com/Aaron-lv/someDockerfile/master/jd_scripts/docker_entrypoint.sh
-    echo "# 远程定时任务" >> $mergedListFile
-    echo "*/1 */1 * * * sh -x /scripts/docker/remote_task.sh >> /scripts/logs/remote_task.log 2>&1" >> $mergedListFile
-    cat /scripts/docker/remote_task.sh > /scripts/docker/docker_entrypoint.sh
-fi
-
 ## 克隆monk-coder仓库
 if [ ! -d "/monk-coder/" ]; then
     echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."

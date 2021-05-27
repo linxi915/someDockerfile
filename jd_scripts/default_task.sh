@@ -4,14 +4,7 @@ set -e
 function initPythonEnv() {
     echo "开始安装运行jd_bot需要的python环境及依赖..."
     sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-    mkdir -p /root/.pip
-    (
-        cat <<EOF
-[global]
-timeout = 6000
-index-url = https://pypi.mirrors.ustc.edu.cn/simple
-EOF
-    ) > /root/.pip/pip.conf
+    pip config --global set global.index-url https://pypi.mirrors.ustc.edu.cn/simple
     echo "开始安装jd_bot依赖..."
     cd /scripts/docker/bot
     pip3 install --upgrade pip
@@ -67,10 +60,6 @@ EOF
             echo $JD_COOKIE | sed "s/[ &]/\\n/g" | sed "/^$/d" >$COOKIES_LIST
         fi
     fi
-
-    echo "容器jd_bot交互所需环境已配置安装已完成..."
-    line=$'\n\n'
-    curl -sX POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" -d "chat_id=$TG_USER_ID&text=恭喜🎉你获得feature$line容器jd_bot交互所需环境已配置安装已完成，并启用。请发送 /help 查看使用帮助。如需禁用请在 docker-compose.yml配置 DISABLE_BOT_COMMAND=True" >>/dev/null
 
 fi
 
@@ -161,7 +150,7 @@ else
 fi
 
 echo "第5步执行proc_file.sh脚本任务..."
-sh /scripts/docker/proc_file.sh
+sh /jds/jd_scripts/proc_file.sh
 
 echo "第6步判断是否配置了随即延迟参数..."
 if [ $RANDOM_DELAY_MAX ]; then
@@ -207,4 +196,4 @@ fi
 crontab $mergedListFile
 
 echo "第11步将仓库的docker_entrypoint.sh脚本更新至系统/usr/local/bin/docker_entrypoint.sh内..."
-cat /scripts/docker/docker_entrypoint.sh >/usr/local/bin/docker_entrypoint.sh
+cat /jds/jd_scripts/docker_entrypoint.sh > /usr/local/bin/docker_entrypoint.sh

@@ -3,14 +3,7 @@ set -e
 
 function initCdn() {
     sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-    mkdir -p /root/.pip
-    (
-        cat <<EOF
-[global]
-timeout = 6000
-index-url = https://pypi.mirrors.ustc.edu.cn/simple
-EOF
-    ) > /root/.pip/pip.conf
+    pip config --global set global.index-url https://pypi.mirrors.ustc.edu.cn/simple
 }
 
 #获取配置的自定义参数
