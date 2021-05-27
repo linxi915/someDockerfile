@@ -6,7 +6,8 @@ function syncRepo() {
     git remote set-url origin $REPO_URL
     echo "git pull拉取最新代码..."
     git reset --hard
-    git pull --rebase
+    git pull origin $REPO_BRANCH --rebase
+    echo "git pull拉取shell最新代码..."
     git -C /jds reset --hard
     git -C /jds pull origin master --rebase
 }
