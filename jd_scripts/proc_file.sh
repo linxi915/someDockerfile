@@ -9,8 +9,6 @@ shareCodesBeanHome="$shareCodesUrl/jd_updateBeanHome.json"
 shareCodesFactoryTuanId="$shareCodesUrl/jd_updateFactoryTuanId.json"
 shareCodesSmallHomeInviteCode="$shareCodesUrl/jd_updateSmallHomeInviteCode.json"
 
-## 修改京喜财富岛定时
-sed -i "/jd_cfd.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_cfd.js | awk '{print $1,$2,$3,$4,$5}')/10 *\/2 * * */g" $mergedListFile
 ## 修改闪购盲盒定时
 sed -i "/jd_sgmh.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_sgmh.js | awk '{print $1,$2,$3,$4,$5}')/55 8,23 * * */g" $mergedListFile
 ## 修改京东家庭号定时
@@ -51,7 +49,7 @@ sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/sh
 ## 签到领现金
 sed -i "s/\`eU9YL5XqGLxSmRSAkwxR@eU9YaO7jMvwh-W_VzyUX0Q@.*$/\`aUNmM6_nOP4j-W4@eU9Yau3kZ_4g-DiByHEQ0A@eU9YaO-2YPUn-TzQwycVgw@ZnQya-i1Y_UmpGzUnnEX@fkFwauq3ZA@eU9YaOvnM_4k9WrcnnAT1Q@eU9Yar-3M_8v9WndniAQhA@f0JyJuW7bvQ@IhM0bu-0b_kv8W6E@eU9YKpnxOLhYtQSygTJQ@-oaWtXEHOrT_bNMMVso@eU9YG7XaD4lXsR2krgpG\`,/g" /scripts/jd_cash.js
 sed -i "s/\`-4msulYas0O2JsRhE-2TA5XZmBQ@.*$/\`aUNmM6_nOP4j-W4@eU9Yau3kZ_4g-DiByHEQ0A@eU9YaO-2YPUn-TzQwycVgw@ZnQya-i1Y_UmpGzUnnEX@fkFwauq3ZA@eU9YaOvnM_4k9WrcnnAT1Q@eU9Yar-3M_8v9WndniAQhA@f0JyJuW7bvQ@IhM0bu-0b_kv8W6E@eU9YKpnxOLhYtQSygTJQ@-oaWtXEHOrT_bNMMVso@eU9YG7XaD4lXsR2krgpG\`,/g" /scripts/jd_cash.js
-sed -i "s/https:\/\/a.nz.lu\/jd_cash.json/$shareCodesCash/g" /scripts/jd_cash.js
+sed -i "s/http:\/\/cdn.annnibb.me\/jd_cash.json/$shareCodesCash/g" /scripts/jd_cash.js
 sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateCash.json/$shareCodesCash/g" /scripts/jd_cash.js
 ## 领京豆
 sed -i "s/https:\/\/a.nz.lu\/bean.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js

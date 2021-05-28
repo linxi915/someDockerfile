@@ -2,14 +2,6 @@
 
 mergedListFile="/scripts/docker/merged_list_file.sh"
 
-if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
-    if [ -d "/data" ]; then
-        if [ -f "/data/env.sh" ]; then
-            source "/data/env.sh"
-        fi
-    fi
-fi
-
 ## 添加定时
 function addCron() {
     jsnames="$(cd /scripts && ls [a-z]*_*.js)"

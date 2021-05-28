@@ -1,15 +1,6 @@
 #!/bin/sh
 set -e
 
-if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
-    if [ -d "/data" ]; then
-        if [ -f "/data/env.sh" ]; then
-            echo "检测到环境变量配置文件 /data/env.sh 存在，使用该文件内环境变量..."
-            source "/data/env.sh"
-        fi
-    fi
-fi
-
 function initPythonEnv() {
     echo "开始安装运行jd_bot需要的python环境及依赖..."
     sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories

@@ -12,12 +12,16 @@ function syncRepo() {
     git -C /jds pull origin master --rebase
 }
 
+if [ -d "/data" ]; then
+    if [ -f "/data/env.sh" ]; then
+        echo "检测到环境变量配置文件 /data/env.sh 存在，使用该文件内环境变量..."
+        source "/data/env.sh"
+    fi
+fi
+
 #获取配置的自定义参数
 if [ "$1" ]; then
     run_cmd=$1
-    if [ -f "/data/env.sh" ]; then
-        source "/data/env.sh"
-    fi
 fi
 
 [ -f /scripts/package.json ] && before_package_json="$(cat /scripts/package.json)"
