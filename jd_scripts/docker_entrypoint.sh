@@ -47,10 +47,10 @@ else
         echo "package.json有更新，执行npm install..."
         npm install --loglevel error --prefix /scripts
         if [ $? -ne 0 ]; then
-            echo "npackage.json有更新，执行安装依赖失败❌，跳过"
+            echo "package.json有更新，执行安装依赖失败❌，跳过"
             exit 1
         else
-            echo "npackage.json有更新，执行安装依赖成功✅"
+            echo "package.json有更新，执行安装依赖成功✅"
         fi
     else
         echo "package.json无变化，跳过npm install..."
