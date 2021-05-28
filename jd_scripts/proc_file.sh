@@ -43,7 +43,7 @@ fi
 
 ## 赚京豆
 sed -i "s/await getRandomCode();/\/\/&/g" /scripts/jd_syj.js
-sed -i "s/https:\/\/a.nz.lu\/jd_zz.json/$shareCodeszz/g" /scripts/jd_syj.js
+sed -i "s/http:\/\/cdn.annnibb.me\/jd_zz.json/$shareCodeszz/g" /scripts/jd_syj.js
 sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_zz.json/$shareCodeszz/g" /scripts/jd_syj.js
 ## 京喜财富岛
 sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/cfd.json/$shareCodesCfd/g" /scripts/jd_cfd.js
@@ -57,9 +57,9 @@ sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCod
 sed -i "s/https:\/\/a.nz.lu\/bean.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js
 sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateBeanHome.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js
 ## 京喜工厂
-sed -i "s/https:\/\/a.nz.lu\/factory.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
-sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_updateFactoryTuanId.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
+sed -i "s/http:\/\/cdn.annnibb.me\/factory.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
 sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateFactoryTuanId.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
+sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_updateFactoryTuanId.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
 ## 东东小窝
 sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateSmallHomeInviteCode.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
 sed -i "s/https:\/\/raw.githubusercontent.com\/LXK9301\/updateTeam\/master\/jd_updateSmallHomeInviteCode.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
