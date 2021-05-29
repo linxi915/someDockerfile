@@ -70,4 +70,4 @@ sed -i "s/'28a699ac78d74aa3b31f7103597f8927@.*$/'6f46a1538969453d9a730ee299f2fc4
 sed_line="$(sed -n "/let inviteCodes = \[/=" /scripts/jd_city.js)"
 line1=`expr $sed_line + 1`
 line2=`expr $sed_line + 2`
-sed -i "$line1,$line2 s/^.*$/  'Vt20l6_xHwimdoPWW5gzmq08WwCxQ6QRqDkqOmY_TVc@QNygguWtSQLvMs-aW5h_j6kjK6vPw-Et5hF3DqE@FI3hwOWtRQLvMs-aW5h_j2-M9HRpLykKZRW_WXo',/g" /scripts/jd_city.js
+sed -i "$line1,$line2 s/^.*$/  'QNygguWtSQLvMs-aW5h_j6kjK6vPw-Et5hF3DqE@FI3hwOWtRQLvMs-aW5h_j2-M9HRpLykKZRW_WXo',/g" /scripts/jd_city.js

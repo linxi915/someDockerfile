@@ -26,6 +26,7 @@ fi
 
 ##京喜工厂自动开团
 if [ $jd_jxFactoryCreateTuan_ENABLE = "Y" ]; then
+    sed -i "s/const tuanActiveId =/& process.env.TUAN_ACTIVEID ||/g" /scripts/jd_jxFactoryCreateTuan.js
     echo "# 京喜工厂自动开团" >> $mergedListFile
     echo "0 0-4/1 * * * cd /scripts && node jd_jxFactoryCreateTuan.js >> logs/jd_jxFactoryCreateTuan.log 2>&1 && upload >> logs/upload_jd_jxFactoryCreateTuan.log 2>&1" >> $mergedListFile
 fi
