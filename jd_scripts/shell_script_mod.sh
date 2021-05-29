@@ -16,6 +16,15 @@ function addCron() {
                 [[ -z "$jsname_cn" ]] && jsname_cn="$jsname_log"
                 jscron="$(cat /scripts/$jsname | grep -oE "/?/?cron \".*\"" | cut -d\" -f2)"
                 [[ -z "$jscron" ]] && jscron="$(cat /scripts/$jsname | grep ^[0-9] | awk '{print $1,$2,$3,$4,$5}' | egrep -v "[a-zA-Z]|:|\." | sort | uniq | head -n 1)"
+                [[ -z "$jscron" ]] && jscron="$(
+                    perl -ne "{
+                        print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$jsname/
+                    }" /scripts/$jsname |
+                    perl -pe "{
+                        s|[^\d\*]*(([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$jsname.*|\1|g;
+                        s|  | |g
+                    }" | sort -u | head -1
+                )"
                 test -n "$jscron" && test -n "$jsname_cn" && echo "# $jsname_cn" >> $mergedListFile
                 test -n "$jscron" && echo "$jscron node /scripts/$jsname >> /scripts/logs/$jsname_log.log 2>&1" >> $mergedListFile
                 test -n "$jscron" && echo $jsname
