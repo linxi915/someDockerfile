@@ -17,9 +17,7 @@ RUN set -ex \
         && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/"
 
 RUN git clone -b $REPO_BRANCH $REPO_URL /scripts \
-        && cd /scripts \
-        && mkdir logs \
-        && npm install
+        && mkdir /scripts/logs
 
 RUN mkdir /jds \
         && cd /jds \
