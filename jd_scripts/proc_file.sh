@@ -4,6 +4,7 @@ mergedListFile="/scripts/docker/merged_list_file.sh"
 shareCodesUrl="https:\/\/ghproxy.com\/https:\/\/raw.githubusercontent.com\/Aaron-lv\/updateTeam\/master\/shareCodes\\"
 shareCodesCfd="$shareCodesUrl/cfd.json"
 shareCodeszz="$shareCodesUrl/jd_zz.json"
+shareCodesZoo="$shareCodesUrl/jd_zoo.json"
 shareCodesCash="$shareCodesUrl/jd_updateCash.json"
 shareCodesBeanHome="$shareCodesUrl/jd_updateBeanHome.json"
 shareCodesFactoryTuanId="$shareCodesUrl/jd_updateFactoryTuanId.json"
@@ -41,28 +42,21 @@ fi
 
 ## 赚京豆
 sed -i "s/await getRandomCode();/\/\/&/g" /scripts/jd_syj.js
-sed -i "s/http:\/\/cdn.annnibb.me\/jd_zz.json/$shareCodeszz/g" /scripts/jd_syj.js
-sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_zz.json/$shareCodeszz/g" /scripts/jd_syj.js
+sed -i "s/http.*:\/\/.*\.json/$shareCodeszz/g" /scripts/jd_syj.js
 ## 京喜财富岛
-sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/cfd.json/$shareCodesCfd/g" /scripts/jd_cfd.js
-sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/cfd.json/$shareCodesCfd/g" /scripts/jd_cfd.js
+sed -i "s/http.*:\/\/.*\.json/$shareCodesCfd/g" /scripts/jd_cfd.js
 ## 签到领现金
 sed_line="$(sed -n "/const inviteCodes = \[/=" /scripts/jd_cash.js)"
 line1=`expr $sed_line + 1`
 line2=`expr $sed_line + 2`
 sed -i "$line1,$line2 s/^.*$/  \`eU9Yau3kZ_4g-DiByHEQ0A@ZnQya-i1Y_UmpGzUnnEX@fkFwauq3ZA@f0JyJuW7bvQ@IhM0bu-0b_kv8W6E@eU9YKpnxOLhYtQSygTJQ@-oaWtXEHOrT_bNMMVso@eU9YG7XaD4lXsR2krgpG\`,/g" /scripts/jd_cash.js
-sed -i "s/http:\/\/cdn.annnibb.me\/jd_cash.json/$shareCodesCash/g" /scripts/jd_cash.js
-sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateCash.json/$shareCodesCash/g" /scripts/jd_cash.js
+sed -i "s/http.*:\/\/.*\.json/$shareCodesCash/g" /scripts/jd_cash.js
 ## 领京豆
-sed -i "s/https:\/\/a.nz.lu\/bean.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js
-sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateBeanHome.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js
+sed -i "s/http.*:\/\/.*\.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js
 ## 京喜工厂
-sed -i "s/http:\/\/cdn.annnibb.me\/factory.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
-sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateFactoryTuanId.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
-sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_updateFactoryTuanId.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
+sed -i "s/http.*:\/\/.*\.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
 ## 东东小窝
-sed -i "s/https:\/\/cdn.jsdelivr.net\/gh\/gitupdate\/updateTeam@master\/shareCodes\/jd_updateSmallHomeInviteCode.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
-sed -i "s/https:\/\/raw.githubusercontent.com\/LXK9301\/updateTeam\/master\/jd_updateSmallHomeInviteCode.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
+sed -i "s/http.*:\/\/.*\.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
 ## 口袋书店
 sed -i "s/'28a699ac78d74aa3b31f7103597f8927@.*$/'6f46a1538969453d9a730ee299f2fc41@3ad242a50e9c4f2d9d2151aee38630b1@1a68165088b345c4ba2d8ce6464fa92b@bf4071c7fcde43828fddb83a08f53d28@abf5065d45e84851b972b37ac205e56a@3d9e58dbf2274db88afa177c7c2dccb0',/g" /scripts/jd_bookshop.js
 
@@ -71,3 +65,6 @@ sed_line="$(sed -n "/let inviteCodes = \[/=" /scripts/jd_city.js)"
 line1=`expr $sed_line + 1`
 line2=`expr $sed_line + 2`
 sed -i "$line1,$line2 s/^.*$/  'QNygguWtSQLvMs-aW5h_j6kjK6vPw-Et5hF3DqE@FI3hwOWtRQLvMs-aW5h_j2-M9HRpLykKZRW_WXo',/g" /scripts/jd_city.js
+## 618动物联萌
+sed -i "s/http.*:\/\/.*\.json/$shareCodesZoo/g" /scripts/jd_zoo.js
+sed -i "s/http:\/\/cdn.trueorfalse.top\/e528ffae31d5407aac83b8c37a4c86bc\//$shareCodesZoo/g" /scripts/jd_zoo.js
