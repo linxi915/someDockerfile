@@ -31,4 +31,3 @@ if [ 0"$TTXY_CRON" = "0" ]; then
 fi
 echo "#甜糖星愿自动收取">> $mergedListFile
 echo "$TTXY_CRON python3 /root/ttnode/AutoTTnodeClient.py >> /logs/AutoTTnodeClient.log 2>&1" >> $mergedListFile
-fi
