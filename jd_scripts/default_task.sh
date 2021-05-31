@@ -47,20 +47,29 @@ echo "合并后定时任务文件路径为 $mergedListFile"
 echo "第1步将默认定时任务列表添加到合并后定时任务文件..."
 cat $defaultListFile >$mergedListFile
 
-echo "第2步判断是否存在自定义任务任务列表并追加..."
+echo "第2步判断是否存在自定义定时任务列表并追加..."
 if [ $CUSTOM_LIST_FILE ]; then
     echo "您配置了自定义任务文件： $CUSTOM_LIST_FILE ，自定义任务类型为： $CUSTOM_LIST_MERGE_TYPE"
     customListFile="/scripts/docker/custom_list_file.sh"
     if expr "$CUSTOM_LIST_FILE" : 'http.*' &>/dev/null; then
         echo "自定义任务文件为远程脚本，开始下载自定义远程任务..."
-        re="$(echo $CUSTOM_LIST_FILE | grep https://raw.githubusercontent.com/)"
-        if [ $re == "" ]; then
-            wget -O $customListFile $CUSTOM_LIST_FILE
+        function customList() {
+            re="$(echo $CUSTOM_LIST_FILE | grep https://raw.githubusercontent.com/)"
+            if [ $re == "" ]; then
+                wget -O $customListFile $CUSTOM_LIST_FILE
+            else
+                CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
+                wget -O $customListFile $CUSTOM_LIST_FILE
+            fi
+        }
+        set +e
+        customList
+        if [ $? -ne 0 ]; then
+            echo "更新自定义定时任务列表出错❌，跳过"
         else
-            CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
-            wget -O $customListFile $CUSTOM_LIST_FILE
+            echo "更新自定义定时任务列表成功✅"
         fi
-        echo "下载完成。"
+        set -e
     elif [ -f /scripts/docker/$CUSTOM_LIST_FILE ]; then
         echo "自定义任务文件为本地挂载。"
         cp -f /scripts/docker/$CUSTOM_LIST_FILE $customListFile
@@ -102,14 +111,23 @@ if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
 else
     if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
         echo "自定义shell脚本为远程脚本，开始下载自定义远程脚本..."
-        re="$(echo $CUSTOM_SHELL_FILE | grep https://raw.githubusercontent.com/)"
-        if [ $re == "" ]; then
-            wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
+        function customShell() {
+            re="$(echo $CUSTOM_SHELL_FILE | grep https://raw.githubusercontent.com/)"
+            if [ $re == "" ]; then
+                wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
+            else
+                CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
+                wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
+            fi
+        }
+        set +e
+        customShell
+        if [ $? -ne 0 ]; then
+            echo "更新自定义shell脚本出错❌，跳过"
         else
-            CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
-            wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
+            echo "更新自定义shell脚本成功✅"
         fi
-        echo "下载完成，开始执行..."
+        set -e
         echo "" >>$mergedListFile
         echo "##############远程脚本##############" >>$mergedListFile
         sh /scripts/docker/shell_script_mod.sh
