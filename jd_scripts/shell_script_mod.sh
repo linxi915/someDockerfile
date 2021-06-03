@@ -11,7 +11,7 @@ function addCron() {
                 continue
             else
                 jsname_log="$(echo $jsname | cut -d \. -f1)"
-                jsname_cn="$(grep "new Env" /scripts/$jsname | awk -F "'|\"" '{print $2}' | head -1)"
+                jsname_cn="$(grep "new Env" /scripts/$jsname | awk -F "\"|'" '{print $2}' | head -1)"
                 [[ -z "$jsname_cn" ]] && jsname_cn="$(grep "cron" /scripts/$jsname | grep -oE "/?/?tag\=.*" | cut -d"=" -f2)"
                 [[ -z "$jsname_cn" ]] && jsname_cn="$jsname_log"
                 jscron="$(cat /scripts/$jsname | grep -oE "/?/?cron \".*\"" | cut -d\" -f2)"
@@ -100,6 +100,13 @@ done
 ## 复制Aaron-lv仓库脚本到运行目录
 if [ -n "$(ls /Aaron-lv/Task/[a-z]*_*.js)" ]; then
     cp -f /Aaron-lv/Task/[a-z]*_*.js /scripts
+fi
+
+## 复制zooPanda仓库脚本到运行目录
+if [ -n "$(ls /zooPanda/[a-z]*.js)" ]; then
+    for jsname in $(cd /zooPanda && ls [a-z]*.js); do
+        cp -f /zooPanda/$jsname /scripts/zooPanda_$jsname
+    done
 fi
 
 ## 删除不运行脚本
