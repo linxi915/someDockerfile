@@ -25,6 +25,7 @@ function addCron() {
                         s|  | |g
                     }" | sort -u | head -1
                 )"
+                [[ -z "$jscron" ]] && jscron="$(cat /scripts/$jsname | grep "推荐cron" | cut -d\: -f2 | sed "s/^ //g")"
                 test -n "$jscron" && test -n "$jsname_cn" && echo "# $jsname_cn" >> $mergedListFile
                 test -n "$jscron" && echo "$jscron node /scripts/$jsname >> /scripts/logs/$jsname_log.log 2>&1" >> $mergedListFile
                 test -n "$jscron" && echo $jsname
@@ -51,6 +52,16 @@ else
     echo "更新Aaron-lv仓库脚本..."
     git -C /Aaron-lv reset --hard
     git -C /Aaron-lv pull origin master --rebase
+fi
+
+## 克隆zooPanda仓库
+if [ ! -d "/zooPanda/" ]; then
+    echo "未检查到zooPanda仓库脚本，初始化下载相关脚本..."
+    git clone https://github.com/zooPanda/zoo /zooPanda
+else
+    echo "更新zooPanda仓库脚本..."
+    git -C /zooPanda reset --hard
+    git -C /zooPanda pull origin dev --rebase
 fi
 
 ## 克隆passerby-b仓库
@@ -117,6 +128,15 @@ if [ -n $Raws ]; then
     for Raw in $Raws; do
         re="$(echo $Raw | grep ^https://raw.githubusercontent.com/)"
         js_dir_name="$(echo ${Raw##*/})"
+        js_dir_name_grep="$(echo $js_dir_name | grep "_")"
+        if [ -z $js_dir_name_grep ]; then
+            js_dir_url="$(echo $Raw | awk -F"https://" '{print NF-1}')"
+            if [ "$js_dir_url" == "1" ]; then
+                js_dir_name="$(echo $Raw | cut -d "/" -f4)_$js_dir_name"
+            elif [ "$js_dir_url" == "2" ]; then
+                js_dir_name="$(echo $Raw | cut -d "/" -f7)_$js_dir_name"
+            fi
+        fi
         if [ -z $re ]; then
             wget -O /scripts/$js_dir_name $Raw
         else
