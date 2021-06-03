@@ -109,6 +109,7 @@ echo "第4步判断是否配置自定义shell脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
     echo "未配置自定shell脚本文件，跳过执行。"
 else
+    set +e
     if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
         echo "自定义shell脚本为远程脚本，开始下载自定义远程脚本..."
         function customShell() {
@@ -120,14 +121,12 @@ else
                 wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
             fi
         }
-        set +e
         customShell
         if [ $? -ne 0 ]; then
             echo "更新自定义shell脚本出错❌，跳过"
         else
             echo "更新自定义shell脚本成功✅"
         fi
-        set -e
         echo "" >>$mergedListFile
         echo "##############远程脚本##############" >>$mergedListFile
         sh /scripts/docker/shell_script_mod.sh
@@ -143,6 +142,7 @@ else
             echo "挂载的自定shell脚本，执行结束。"
         fi
     fi
+    set -e
 fi
 
 echo "第5步执行 proc_file.sh 脚本任务..."
