@@ -23,8 +23,8 @@ if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
 else
     if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
         echo "自定义shell脚本为远程脚本，开始下载自定义远程脚本..."
-        re="$(echo $CUSTOM_SHELL_FILE | grep https://raw.githubusercontent.com/)"
-        if [ $re == "" ]; then
+        re="$(echo $CUSTOM_SHELL_FILE | grep ^https://raw.githubusercontent.com/)"
+        if [ -z $re ]; then
             wget -O /pss/pack_some_script/pss_shell_mod.sh $CUSTOM_SHELL_FILE
         else
             CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
