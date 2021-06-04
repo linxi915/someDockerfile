@@ -10,8 +10,7 @@ shareCodesBeanHome="$shareCodesUrl/jd_updateBeanHome.json"
 shareCodesFactoryTuanId="$shareCodesUrl/jd_updateFactoryTuanId.json"
 shareCodesSmallHomeInviteCode="$shareCodesUrl/jd_updateSmallHomeInviteCode.json"
 
-## 修改闪购盲盒定时
-sed -i "/jd_sgmh.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_sgmh.js | awk '{print $1,$2,$3,$4,$5}')/55 8,23 * * */g" $mergedListFile
+
 ## 修改京东家庭号定时
 sed -i "/jd_family.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_family.js | awk '{print $1,$2,$3,$4,$5}')/30 6,15 * * */g" $mergedListFile
 ## 修改美丽颜究院定时
@@ -31,11 +30,11 @@ sed -i "/jd_speed_redpocke.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//
 sed -i "s/find.*$/find \/scripts\/logs -name '\*.log' \| grep -v 'sharecodeCollection' \| xargs -i rm -rf {}/g" $mergedListFile
 
 ## 健康社区
-sed -i "/jd_health.js/s/^.*$/#&/g" $mergedListFile
+sed -i "/jd_health.js/s/^.*$/# &/g" $mergedListFile
 sed -i "/z_health_community.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep z_health_community.js | awk '{print $1,$2,$3,$4,$5}')/13 1,6,22 * * */g" $mergedListFile
 
 ## 超级直播间
-sed -i "/jd_live_redrain.js/s/^.*$/#&/g" $mergedListFile
+sed -i "/jd_live_redrain.js/s/^.*$/# &/g" $mergedListFile
 if [ "$(date +%-H)" == "23" ]; then
    sed -i "/jd_super_redrain.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_super_redrain.js | awk '{print $1,$2,$3,$4,$5}')/0,1 0-23\/1 * * */g" $mergedListFile
 fi
@@ -61,10 +60,10 @@ sed -i "s/http.*:\/\/.*\.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_smal
 sed -i "s/'28a699ac78d74aa3b31f7103597f8927@.*$/'6f46a1538969453d9a730ee299f2fc41@3ad242a50e9c4f2d9d2151aee38630b1@1a68165088b345c4ba2d8ce6464fa92b@bf4071c7fcde43828fddb83a08f53d28@abf5065d45e84851b972b37ac205e56a@3d9e58dbf2274db88afa177c7c2dccb0',/g" /scripts/jd_bookshop.js
 
 ## 城城分现金
-sed_line="$(sed -n "/let inviteCodes = \[/=" /scripts/jd_city.js)"
-line1=`expr $sed_line + 1`
-line2=`expr $sed_line + 2`
-sed -i "$line1,$line2 s/^.*$/  'QNygguWtSQLvMs-aW5h_j6kjK6vPw-Et5hF3DqE@FI3hwOWtRQLvMs-aW5h_j2-M9HRpLykKZRW_WXo',/g" /scripts/jd_city.js
+# sed_line="$(sed -n "/let inviteCodes = \[/=" /scripts/jd_city.js)"
+# line1=`expr $sed_line + 1`
+# line2=`expr $sed_line + 2`
+# sed -i "$line1,$line2 s/^.*$/  '',/g" /scripts/jd_city.js
 ## 618动物联萌
 sed -i "s/http.*:\/\/.*\.json/$shareCodesZoo/g" /scripts/jd_zoo.js
 sed -i "s/http:\/\/cdn.trueorfalse.top\/e528ffae31d5407aac83b8c37a4c86bc\//$shareCodesZoo/g" /scripts/jd_zoo.js

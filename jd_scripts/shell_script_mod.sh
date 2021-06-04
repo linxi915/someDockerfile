@@ -65,7 +65,7 @@ else
 fi
 
 ## 克隆passerby-b仓库
-if [ ! -z $JDDJ_COOKIE ]; then
+if [ -n $JDDJ_COOKIE ]; then
     if [ ! -d "/passerby-b/" ]; then
         echo "未检查到passerby-b仓库脚本，初始化下载相关脚本..."
         git clone https://github.com/passerby-b/JDDJ /passerby-b
@@ -89,7 +89,7 @@ for jsname in $jsnames; do
 done
 
 ## 复制monk-coder仓库脚本到运行目录
-js_dir="car&i-chenzhe&member&normal"
+js_dir="i-chenzhe&member&normal"
 arr=${js_dir//&/ }
 for item in $arr; do
     if [ -n "$(ls /monk-coder/$item/[a-z]*_*.js)" ]; then
@@ -111,7 +111,7 @@ fi
 
 ## 删除不运行脚本
 if [ -n "$(ls /scripts/[!jA-Z]*_*.js)" ]; then
-    js_del="z_carnivalcity&z_city_cash&z_health_energy&z_marketLottery&z_mother_jump&z_shake&z_xmf&adolf_star&jx_cfdtx"
+    js_del="zooPanda_zooBrandcity&jx_cfdtx"
     arr=${js_del//&/ }
     for item in $arr; do
         rm -rf /scripts/$item.js
@@ -162,7 +162,7 @@ fi
 ## 复制passerby-b仓库脚本到运行目录并添加定时
 if [ -d "/passerby-b/" ]; then
     if [ -n "$(ls /passerby-b/[a-z]*_*.js)" ]; then
-        cp -rf /passerby-b/[a-z]*_*.js /scripts
+        cp -f /passerby-b/[a-z]*_*.js /scripts
         echo -e "\n##############京东到家##############" >> $mergedListFile
         echo "添加passerby-b仓库脚本,脚本列表:"
         addCron
@@ -173,8 +173,10 @@ fi
 if [ ! -d "/diy/" ]; then
     echo "未检查到挂载文件夹，请挂载本地文件夹到容器/diy文件夹..."
 else
-    if [ -n "$(ls /diy/[a-z]*_*.js)" ]; then
-        cp -rf /diy/[a-z]*_*.js /scripts
+    if [ -n "$(ls /diy/[a-z]*.js)" ]; then
+        for jsname in $(cd /diy && ls [a-z]*.js); do
+            cp -f /diy/$jsname /scripts/diy_$jsname
+        done
         echo -e "\n##############挂载脚本##############" >> $mergedListFile
         echo "添加挂载脚本,脚本列表:"
         addCron
