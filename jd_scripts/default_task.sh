@@ -48,14 +48,14 @@ echo "第1步将默认定时任务列表添加到合并后定时任务文件..."
 cat $defaultListFile >$mergedListFile
 
 echo "第2步判断是否存在自定义定时任务列表并追加..."
-if [ $CUSTOM_LIST_FILE ]; then
+if [ -n "$CUSTOM_LIST_FILE" ]; then
     echo "您配置了自定义任务文件： $CUSTOM_LIST_FILE ，自定义任务类型为： $CUSTOM_LIST_MERGE_TYPE"
     customListFile="/scripts/docker/custom_list_file.sh"
     if expr "$CUSTOM_LIST_FILE" : 'http.*' &>/dev/null; then
         echo "自定义任务文件为远程脚本，开始下载自定义远程任务..."
         function customList() {
             re="$(echo $CUSTOM_LIST_FILE | grep ^https://raw.githubusercontent.com/)"
-            if [ -z $re ]; then
+            if [ -z "$re" ]; then
                 wget -O $customListFile $CUSTOM_LIST_FILE
             else
                 CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
@@ -70,20 +70,20 @@ if [ $CUSTOM_LIST_FILE ]; then
             echo "更新自定义定时任务列表成功✅"
         fi
         set -e
-    elif [ -f /scripts/docker/$CUSTOM_LIST_FILE ]; then
+    elif [ -f "/scripts/docker/$CUSTOM_LIST_FILE" ]; then
         echo "自定义任务文件为本地挂载。"
         cp -f /scripts/docker/$CUSTOM_LIST_FILE $customListFile
-    elif [ -f /data/$CUSTOM_LIST_FILE ]; then
+    elif [ -f "/data/$CUSTOM_LIST_FILE" ]; then
         echo "自定义任务文件为本地挂载。"
         cp -f /data/$CUSTOM_LIST_FILE $customListFile
     fi
 
     if [ -f "$customListFile" ]; then
-        if [ $CUSTOM_LIST_MERGE_TYPE == "append" ]; then
+        if [ "$CUSTOM_LIST_MERGE_TYPE" == "append" ]; then
             echo "合并默认定时任务文件： $DEFAULT_LIST_FILE 和 自定义定时任务文件： $CUSTOM_LIST_FILE"
             echo -e "" >>$mergedListFile
             cat $customListFile >>$mergedListFile
-        elif [ $CUSTOM_LIST_MERGE_TYPE == "overwrite" ]; then
+        elif [ "$CUSTOM_LIST_MERGE_TYPE" == "overwrite" ]; then
             echo "配置了自定义任务文件： $CUSTOM_LIST_FILE ，自定义任务类型为： $CUSTOM_LIST_MERGE_TYPE"
             cat $customListFile >$mergedListFile
         else
@@ -97,10 +97,10 @@ else
 fi
 
 echo "第3步判断是否配置了默认定时任务..."
-if [ $(grep -c "docker_entrypoint.sh" $mergedListFile) -eq '0' ]; then
+if [ $(grep -c "docker_entrypoint.sh" "$mergedListFile") -eq '0' ]; then
     echo "合并后的定时任务文件，未包含必须的默认定时任务，增加默认定时任务..."
-    echo "# 默认定时任务" >>$mergedListFile
-    echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >>$mergedListFile
+    echo "# 默认定时任务" >> $mergedListFile
+    echo "52 */1 * * * docker_entrypoint.sh >> /scripts/logs/default_task.log 2>&1" >> $mergedListFile
 else
     echo "合并后的定时任务文件，已包含必须的默认定时任务，跳过执行..."
 fi
@@ -114,7 +114,7 @@ else
         echo "自定义shell脚本为远程脚本，开始下载自定义远程脚本..."
         function customShell() {
             re="$(echo $CUSTOM_SHELL_FILE | grep ^https://raw.githubusercontent.com/)"
-            if [ -z $re ]; then
+            if [ -z "$re" ]; then
                 wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
             else
                 CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
@@ -127,17 +127,17 @@ else
         else
             echo "更新自定义shell脚本成功✅"
         fi
-        echo "" >>$mergedListFile
-        echo "##############远程脚本##############" >>$mergedListFile
+        echo "" >> $mergedListFile
+        echo "##############远程脚本##############" >> $mergedListFile
         sh /scripts/docker/shell_script_mod.sh
         echo "自定义远程shell脚本下载并执行结束。"
     else
-        if [ ! -f $CUSTOM_SHELL_FILE ]; then
+        if [ ! -f "$CUSTOM_SHELL_FILE" ]; then
             echo "自定义shell脚本为挂载的脚本文件，但是指定挂载文件不存在，跳过执行。"
         else
             echo "挂载的自定shell脚本，开始执行..."
             echo "" >>$mergedListFile
-            echo "##############远程脚本##############" >>$mergedListFile
+            echo "##############远程脚本##############" >> $mergedListFile
             sh $CUSTOM_SHELL_FILE
             echo "挂载的自定shell脚本，执行结束。"
         fi
@@ -149,8 +149,8 @@ echo "第5步执行 proc_file.sh 脚本任务..."
 sh /jds/jd_scripts/proc_file.sh
 
 echo "第6步判断是否配置了随即延迟参数..."
-if [ $RANDOM_DELAY_MAX ]; then
-    if [ $RANDOM_DELAY_MAX -ge 1 ]; then
+if [ -n "$RANDOM_DELAY_MAX" ]; then
+    if [ "$RANDOM_DELAY_MAX" -ge "1" ]; then
         echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
         sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js\|long_hby_lottery.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_xtg_help.js\|jd_big_winner.js$MY_RANDOM/!s/node/sleep \$((RANDOM % $RANDOM_DELAY_MAX)); node/g" $mergedListFile
     fi
@@ -159,7 +159,7 @@ else
 fi
 
 echo "第7步判断是否开启了自动互助..."
-if [ $ENABLE_AUTO_HELP = "true" ]; then
+if [ "$ENABLE_AUTO_HELP" = "true" ]; then
     echo "已开启自动互助，设置互助参数中..."
     sed -i "/jd_fruit.js\|jd_pet.js\|jd_plantBean.js\|jd_dreamFactory.js\|jd_jdfactory.js\|jd_crazy_joy.js\|jd_cfd.js\|jd_jxnc.js\|jd_jdzz.js\|jd_bookshop.js\|jd_cash.js\|jd_sgmh.js\|jd_health.js/s/node/. \/scripts\/docker\/auto_help.sh export > \/scripts\/logs\/auto_help_export.log \&\& node/g" $mergedListFile
 else
@@ -167,7 +167,7 @@ else
 fi
 
 echo "第8步判断是否配置了不运行的脚本..."
-if [ $DO_NOT_RUN_SCRIPTS ]; then
+if [ -n "$DO_NOT_RUN_SCRIPTS" ]; then
     echo "您配置了不运行的脚本：$DO_NOT_RUN_SCRIPTS"
     arr=${DO_NOT_RUN_SCRIPTS//&/ }
     for item in $arr; do
@@ -179,7 +179,7 @@ echo "第9步增加 |ts 任务日志输出时间戳..."
 sed -i "/\( ts\| |ts\|| ts\)/!s/>>/\|ts >>/g" $mergedListFile
 
 echo "第10步加载最新的定时任务文件..."
-if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
+if [[ -f "/usr/bin/jd_bot" && -z "$DISABLE_SPNODE" ]]; then
     echo "bot交互与spnode前置条件成立，替换任务列表的 node 指令为 spnode "
     sed -i "s/ node / spnode /g" $mergedListFile
     sed -i "/jd_blueCoin.js\|jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js/s/spnode/spnode conc/g" $mergedListFile
@@ -190,14 +190,14 @@ fi
 crontab $mergedListFile
 
 echo "第11步处理jd_crazy_joy_coin任务..."
-if [ ! $CRZAY_JOY_COIN_ENABLE ]; then
+if [ -z "$CRZAY_JOY_COIN_ENABLE" ]; then
    echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
    eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
    echo '' >/scripts/logs/jd_crazy_joy_coin.log
    $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
    echo "默认jd_crazy_joy_coin,重启完成"
 else
-   if [ $CRZAY_JOY_COIN_ENABLE = "Y" ]; then
+   if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
       echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
       eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
       echo '' >/scripts/logs/jd_crazy_joy_coin.log
@@ -212,12 +212,12 @@ fi
 echo "第12步将仓库的 docker_entrypoint.sh 脚本更新至系统 /usr/local/bin/docker_entrypoint.sh 内..."
 cat /jds/jd_scripts/docker_entrypoint.sh > /usr/local/bin/docker_entrypoint.sh
 
-if [[ -f /usr/bin/jd_bot && -z "$DISABLE_SPNODE" ]]; then
+if [[ -f "/usr/bin/jd_bot" && -z "$DISABLE_SPNODE" ]]; then
     echo "第13步将仓库的 shell_spnode.sh 脚本更新至系统 /usr/local/bin/spnode 内..."
     cat /jds/jd_scripts/shell_spnode.sh > /usr/local/bin/spnode
     if [ -f "/jds/jd_scripts/code_gen_conf.list" ]; then
         echo "第14步生成互助消息需要使用的 code_gen_conf.list 文件..."
-        [[ -z $GEN_CODE_CONF ]] && GEN_CODE_CONF="/scripts/logs/code_gen_conf.list"
+        [[ -z "$GEN_CODE_CONF" ]] && GEN_CODE_CONF="/scripts/logs/code_gen_conf.list"
         cp -f /jds/jd_scripts/code_gen_conf.list $GEN_CODE_CONF
     fi
 fi
