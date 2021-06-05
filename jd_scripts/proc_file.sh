@@ -29,10 +29,6 @@ sed -i "/jd_speed_redpocke.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//
 ## 清理日志
 sed -i "s/find.*$/find \/scripts\/logs -name '\*.log' \| grep -v 'sharecodeCollection' \| xargs -i rm -rf {}/g" $mergedListFile
 
-## 健康社区
-sed -i "/jd_health.js/s/^.*$/# &/g" $mergedListFile
-sed -i "/z_health_community.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep z_health_community.js | awk '{print $1,$2,$3,$4,$5}')/13 1,6,22 * * */g" $mergedListFile
-
 ## 超级直播间
 sed -i "/jd_live_redrain.js/s/^.*$/# &/g" $mergedListFile
 if [ "$(date +%-H)" == "23" ]; then

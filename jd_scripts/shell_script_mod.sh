@@ -6,7 +6,7 @@ mergedListFile="/scripts/docker/merged_list_file.sh"
 function addCron() {
     jsnames="$(cd /scripts && ls [a-z]*_*.js)"
     for jsname in $jsnames; do
-        if [ $(grep -c $jsname $mergedListFile) -eq '0' ]; then
+        if [ $(grep -c "$jsname" "$mergedListFile") -eq '0' ]; then
             if [ "$jsname" == "jd_crazy_joy_coin.js" ]; then
                 continue
             else
@@ -26,6 +26,8 @@ function addCron() {
                     }" | sort -u | head -1
                 )"
                 [[ -z "$jscron" ]] && jscron="$(cat /scripts/$jsname | grep "推荐cron" | cut -d\: -f2 | sed "s/^ //g")"
+                re="$(echo $jsname | grep zooOpencard)"
+                [[ -z "$re" ]] && [[ -z "$jscron" ]] && jscron="31 8,21 * * *"
                 test -n "$jscron" && test -n "$jsname_cn" && echo "# $jsname_cn" >> $mergedListFile
                 test -n "$jscron" && echo "$jscron node /scripts/$jsname >> /scripts/logs/$jsname_log.log 2>&1" >> $mergedListFile
                 test -n "$jscron" && echo $jsname
@@ -65,7 +67,7 @@ else
 fi
 
 ## 克隆passerby-b仓库
-if [ -n $JDDJ_COOKIE ]; then
+if [ 0"$JDDJ_COOKIE" != "0" ]; then
     if [ ! -d "/passerby-b/" ]; then
         echo "未检查到passerby-b仓库脚本，初始化下载相关脚本..."
         git clone https://github.com/passerby-b/JDDJ /passerby-b
@@ -79,7 +81,7 @@ fi
 ## 删除运行目录中不在定时文件里的脚本
 jsnames="$(cd /scripts && ls [a-z]*_*.js)"
 for jsname in $jsnames; do
-    if [ $(grep -c $jsname $mergedListFile) -eq '0' ]; then
+    if [ $(grep -c "$jsname" "$mergedListFile") -eq '0' ]; then
         if [[ "$jsname" == "jd_speed.js" || "$jsname" == "jd_crazy_joy_coin.js" ]]; then
             continue
         else
@@ -120,7 +122,7 @@ fi
 
 ## wget方式添加脚本
 ## 京东试用
-if [ $jd_try_ENABLE = "Y" ]; then
+if [ "$jd_try_ENABLE" = "Y" ]; then
     wget -O /scripts/jd_try.js https://ghproxy.com/https://raw.githubusercontent.com/ZCY01/daily_scripts/main/jd/jd_try.js
 fi
 ## 自定义脚本
@@ -130,13 +132,13 @@ for i in `seq 10`; do
         Raws="$Raws&$Raws_tmp"
     fi
 done
-if [ -n $Raws ]; then
+if [ -n "$Raws" ]; then
     Raws=${Raws//&/ }
     for Raw in $Raws; do
         re="$(echo $Raw | grep ^https://raw.githubusercontent.com/)"
         js_dir_name="$(echo ${Raw##*/})"
         js_dir_name_grep="$(echo $js_dir_name | grep "_")"
-        if [ -z $js_dir_name_grep ]; then
+        if [ -z "$js_dir_name_grep" ]; then
             js_dir_url="$(echo $Raw | awk -F"https://" '{print NF-1}')"
             if [ "$js_dir_url" == "1" ]; then
                 js_dir_name="$(echo $Raw | cut -d "/" -f4)_$js_dir_name"
@@ -144,7 +146,7 @@ if [ -n $Raws ]; then
                 js_dir_name="$(echo $Raw | cut -d "/" -f7)_$js_dir_name"
             fi
         fi
-        if [ -z $re ]; then
+        if [ -z "$re" ]; then
             wget -O /scripts/$js_dir_name $Raw
         else
             Raw="$(echo $Raw | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"

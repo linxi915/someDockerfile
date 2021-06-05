@@ -17,7 +17,7 @@ if [ $1 == "conc" ]; then
 elif [ -n "$(echo $first | sed -n "/^[0-9]\+$/p")" ]; then
     if [ $2 == "all" ]; then
         for job in $(ls *_*.js | grep -v "JS_*\|JD_DailyBonus\|JD_extra_cookie\|USER_AGENTS\|jd_crazy_joy\|jd_beauty" |sed "s/.js//g" | tr "\n" " "); do
-            export JD_COOKIE=$(cat $COOKIES_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${job} | tee -a "${LOGS_DIR}/${job}.log"
+            export JD_COOKIE=$(cat $COOKIES_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${job} | tee -a "/scripts/logs/${job}.log"
         done
     else
         {
@@ -27,7 +27,7 @@ elif [ -n "$(echo $first | sed -n "/^[0-9]\+$/p")" ]; then
 elif [ -n "$(cat $COOKIES_LIST | grep "pt_pin=$first")" ]; then
     if [ $2 == "all" ]; then
         for job in $(ls *_*.js | grep -v "JS_*\|JD_DailyBonus\|JD_extra_cookie\|USER_AGENTS\|jd_crazy_joy\|jd_beauty" |sed "s/.js//g" | tr "\n" " "); do
-            export JD_COOKIE=$(cat $COOKIES_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${job} | tee -a "${LOGS_DIR}/${job}.log"
+            export JD_COOKIE=$(cat $COOKIES_LIST | grep -v "#\|^$" | sed -n "${first}p") && node ${job} | tee -a "/scripts/logs/${job}.log"
         done
     else
         {
