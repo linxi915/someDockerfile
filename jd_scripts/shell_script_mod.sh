@@ -14,26 +14,23 @@ function addCron() {
                 jsname_cn="$(grep "new Env" /scripts/$jsname | awk -F "\(" '{print $2}' | awk -F "\)" '{print $1}' | sed 's:^.\(.*\).$:\1:' | head -1)"
                 [[ -z "$jsname_cn" ]] && jsname_cn="$(grep "cron" /scripts/$jsname | grep -oE "/?/?tag\=.*" | cut -d"=" -f2)"
                 [[ -z "$jsname_cn" ]] && jsname_cn="$jsname_log"
-                jscron="$(cat /scripts/$jsname | grep -oE "/?/?cron \".*\"" | cut -d\" -f2)"
-                if [ -n "$(grep "^[0-9]" /scripts/$jsname)" ]; then
-                    [[ -z "$jscron" ]] && jscron="$(grep "^[0-9]" /scripts/$jsname | awk '{print $1,$2,$3,$4,$5}' | egrep -v "[a-zA-Z]|:|\." | sort | uniq | head -n 1)"
-                elif [ -n "$(grep "^ [0-9]" /scripts/$jsname)" ]; then
-                    [[ -z "$jscron" ]] && jscron="$(grep "^ [0-9]" /scripts/$jsname | sed "s/^ //g" | awk '{print $1,$2,$3,$4,$5}' | egrep -v "[a-zA-Z]|:|\." | sort | uniq | head -n 1)"
+                if [ -n "$(grep $jsname /scripts/$jsname)" ]; then
+                    jscron_name="$jsname"
+                else
+                    path="$(echo $jsname | awk -F "_" '{print $1}')"
+                    jscron_name=${jsname/${path}\_/}
                 fi
-                [[ -z "$jscron" ]] && jscron="$(
+                jscron="$(
                     perl -ne "{
-                        print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$jsname/
+                        print if /.*([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*]( |,|\").*$jscron_name/
                     }" /scripts/$jsname |
                     perl -pe "{
-                        s|[^\d\*]*(([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$jsname.*|\1|g;
+                        s|[^\d\*]*(([\d\*]*[\*-\/,\d]*[\d\*] ){4,5}[\d\*]*[\*-\/,\d]*[\d\*])( \|,\|\").*/?$jscron_name.*|\1|g;
                         s|\*([\d\*])(.*)|\1\2|g;
                         s|  | |g;
                     }" | sort -u | head -1
                 )"
                 [[ -z "$jscron" ]] && jscron="$(grep "cron:" /scripts/$jsname | awk -F ":" '{print $2}' | xargs)"
-                re="$(echo $jsname_log | grep ".*[0-9][0-9]$")"
-                [[ -z "$re" ]] && re="$(echo $jsname_log | grep "^jddj_")"
-                [[ -z "$re" ]] && [[ -z "$jscron" ]] && jscron="26 8,21 * * *"
                 test -n "$jscron" && test -n "$jsname_cn" && echo "# $jsname_cn" >> $mergedListFile
                 test -n "$jscron" && echo "$jscron node /scripts/$jsname >> /scripts/logs/$jsname_log.log 2>&1" >> $mergedListFile
                 test -n "$jscron" && echo $jsname
