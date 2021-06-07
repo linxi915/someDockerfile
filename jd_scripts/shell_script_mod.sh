@@ -39,16 +39,6 @@ function addCron() {
     done
 }
 
-## 克隆monk-coder仓库
-if [ ! -d "/monk-coder/" ]; then
-    echo "未检查到monk-coder仓库脚本，初始化下载相关脚本..."
-    git clone -b dust https://github.com/Aaron-lv/sync /monk-coder
-else
-    echo "更新monk-coder仓库脚本..."
-    git -C /monk-coder reset --hard
-    git -C /monk-coder pull origin dust --rebase
-fi
-
 ## 克隆Aaron-lv仓库
 if [ ! -d "/Aaron-lv/" ]; then
     echo "未检查到Aaron-lv仓库脚本，初始化下载相关脚本..."
@@ -90,15 +80,6 @@ for jsname in $jsnames; do
         else
             rm -rf /scripts/$jsname
         fi
-    fi
-done
-
-## 复制monk-coder仓库脚本到运行目录
-js_dir="i-chenzhe&member&normal"
-arr=${js_dir//&/ }
-for item in $arr; do
-    if [ -n "$(ls /monk-coder/$item/[a-z]*_*.js)" ]; then
-        cp -f /monk-coder/$item/[a-z]*_*.js /scripts
     fi
 done
 

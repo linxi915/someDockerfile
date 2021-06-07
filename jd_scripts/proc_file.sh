@@ -55,11 +55,6 @@ sed -i "s/http.*:\/\/.*\.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_smal
 ## 口袋书店
 sed -i "s/'28a699ac78d74aa3b31f7103597f8927@.*$/'6f46a1538969453d9a730ee299f2fc41@3ad242a50e9c4f2d9d2151aee38630b1@1a68165088b345c4ba2d8ce6464fa92b@bf4071c7fcde43828fddb83a08f53d28@abf5065d45e84851b972b37ac205e56a@3d9e58dbf2274db88afa177c7c2dccb0',/g" /scripts/jd_bookshop.js
 
-## 城城分现金
-# sed_line="$(sed -n "/let inviteCodes = \[/=" /scripts/jd_city.js)"
-# line1=`expr $sed_line + 1`
-# line2=`expr $sed_line + 2`
-# sed -i "$line1,$line2 s/^.*$/  '',/g" /scripts/jd_city.js
 ## 618动物联萌
 sed -i "s/http.*:\/\/.*\.json/$shareCodesZoo/g" /scripts/jd_zoo.js
 sed -i "s/http:\/\/cdn.trueorfalse.top\/e528ffae31d5407aac83b8c37a4c86bc\//$shareCodesZoo/g" /scripts/jd_zoo.js
