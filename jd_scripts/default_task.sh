@@ -59,7 +59,7 @@ if [ -n "$CUSTOM_LIST_FILE" ]; then
             if [ -z "$re" ]; then
                 wget -O $customListFile $CUSTOM_LIST_FILE
             else
-                CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
+                CUSTOM_LIST_FILE="$(echo $CUSTOM_LIST_FILE | sed "s/raw.githubusercontent.com/ghproxy.zsddns.ga\/https:\/\/&/g")"
                 wget -O $customListFile $CUSTOM_LIST_FILE
             fi
         }
@@ -118,7 +118,7 @@ else
             if [ -z "$re" ]; then
                 wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
             else
-                CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
+                CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.zsddns.ga\/https:\/\/&/g")"
                 wget -O /scripts/docker/shell_script_mod.sh $CUSTOM_SHELL_FILE
             fi
         }

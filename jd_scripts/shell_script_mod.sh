@@ -105,11 +105,6 @@ if [ -n "$(ls /scripts/[!jA-Z]*_*.js)" ]; then
 fi
 
 ## wget方式添加脚本
-## 京东试用
-if [ "$jd_try_ENABLE" = "Y" ]; then
-    wget -O /scripts/jd_try.js https://ghproxy.com/https://raw.githubusercontent.com/ZCY01/daily_scripts/main/jd/jd_try.js
-fi
-## 自定义脚本
 for i in `seq 10`; do
     if [ -n "$(eval echo \$Raw$i)" ]; then
         Raws_tmp="$(eval echo \$Raw$i)"
@@ -133,7 +128,7 @@ if [ -n "$Raws" ]; then
         if [ -z "$re" ]; then
             wget -O /scripts/$js_dir_name $Raw
         else
-            Raw="$(echo $Raw | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
+            Raw="$(echo $Raw | sed "s/raw.githubusercontent.com/ghproxy.zsddns.ga\/https:\/\/&/g")"
             wget -O /scripts/$js_dir_name $Raw
         fi
     done
