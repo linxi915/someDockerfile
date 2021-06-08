@@ -6,6 +6,7 @@ function initPythonEnv() {
     sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
     pip config --global set global.index-url https://pypi.mirrors.ustc.edu.cn/simple
     echo "开始安装jd_bot依赖..."
+    cp -f /jds/jd_scripts/bot/jd_bot /scripts/docker/bot/
     cd /scripts/docker/bot
     pip3 install --upgrade pip
     pip3 install -r requirements.txt
