@@ -26,7 +26,7 @@ function inithotsoon() {
     git config core.sparsecheckout true
     echo Scripts/hotsoon_old.js >>/hotsoon/.git/info/sparse-checkout
     git pull origin master --rebase
-    wget -O /hotsoon/package.json https://ghproxy.com/https://raw.githubusercontent.com/Aaron-lv/sync/JavaScript/package.json
+    wget -O /hotsoon/package.json https://ghproxy.zsddns.ga/https://raw.githubusercontent.com/Aaron-lv/sync/JavaScript/package.json
     npm install
 }
 
@@ -76,8 +76,8 @@ else
         cd /xmly_speed
         pip3 install -r requirements.txt
     fi
-    wget -O /xmly_speed/util.py https://ghproxy.com/https://raw.githubusercontent.com/whyour/hundun/master/quanx/util.py
-    wget -O /xmly_speed/xmly_speed.py https://ghproxy.com/https://raw.githubusercontent.com/whyour/hundun/master/quanx/xmly_speed.py
+    wget -O /xmly_speed/util.py https://ghproxy.zsddns.ga/https://raw.githubusercontent.com/whyour/hundun/master/quanx/util.py
+    wget -O /xmly_speed/xmly_speed.py https://ghproxy.zsddns.ga/https://raw.githubusercontent.com/whyour/hundun/master/quanx/xmly_speed.py
     sed -i 's/BARK/BARK_PUSH/g' /xmly_speed/util.py
     sed -i 's/SCKEY/PUSH_KEY/g' /xmly_speed/util.py
     sed -i 's/if\ XMLY_ACCUMULATE_TIME.*$/if\ os.environ["XMLY_ACCUMULATE_TIME"]=="1":/g' /xmly_speed/xmly_speed.py
@@ -109,10 +109,10 @@ else
         echo "更新hotsoon脚本相关文件"
         git -C /hotsoon reset --hard
         git -C /hotsoon pull origin master --rebase
-        wget -O /hotsoon/package.json https://ghproxy.com/https://raw.githubusercontent.com/Aaron-lv/sync/JavaScript/package.json
+        wget -O /hotsoon/package.json https://ghproxy.zsddns.ga/https://raw.githubusercontent.com/Aaron-lv/sync/JavaScript/package.json
         npm install --loglevel error --prefix /hotsoon
     fi
-    wget -O /hotsoon/Scripts/sendNotify.js https://ghproxy.com/https://raw.githubusercontent.com/Ariszy/script/master/sendNotify.js
+    wget -O /hotsoon/Scripts/sendNotify.js https://ghproxy.zsddns.ga/https://raw.githubusercontent.com/Ariszy/script/master/sendNotify.js
     if [ 0"$HOTSOON_CRON" = "0" ]; then
         HOTSOON_CRON="*/5 1-23/1 * * *"
     fi
@@ -206,7 +206,7 @@ fi
 if [ 0"$DDAYD_ddaydCK" = "0" ]; then
     echo "没有配置多多爱运动，相关环境变量参数，跳过配置定时任务"
 else
-    wget -O /ZIYE_JavaScript/Task/ddayd.js https://ghproxy.com/https://raw.githubusercontent.com/Aaron-lv/sync/2a9d66a462c0a150768bd18936fb083dab79d1b6/Task/ddayd.js
+    wget -O /ZIYE_JavaScript/Task/ddayd.js https://ghproxy.zsddns.ga/https://raw.githubusercontent.com/Aaron-lv/sync/2a9d66a462c0a150768bd18936fb083dab79d1b6/Task/ddayd.js
     if [ 0"$DDAYD_CRON" = "0" ]; then
         DDAYD_CRON="10 * * * *"
     fi

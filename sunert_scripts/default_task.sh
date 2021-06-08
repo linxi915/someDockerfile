@@ -27,7 +27,7 @@ else
         if [ -z $re ]; then
             wget -O /pss/sunert_scripts/pss_shell_mod.sh $CUSTOM_SHELL_FILE
         else
-            CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.com\/https:\/\/&/g")"
+            CUSTOM_SHELL_FILE="$(echo $CUSTOM_SHELL_FILE | sed "s/raw.githubusercontent.com/ghproxy.zsddns.ga\/https:\/\/&/g")"
             wget -O /pss/sunert_scripts/pss_shell_mod.sh $CUSTOM_SHELL_FILE
         fi
         echo "下载完成，开始执行..."
