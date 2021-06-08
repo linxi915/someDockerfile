@@ -36,6 +36,9 @@ function addCron() {
                 test -n "$jscron" && echo $jsname
             fi
         fi
+        if [ -n "$(grep "const helpAu = true;" /scripts/$jsname)" ]; then
+            sed -i "s/const helpAu = true;/const helpAu = false;/g" /scripts/$jsname
+        fi
     done
 }
 

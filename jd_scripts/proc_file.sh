@@ -29,6 +29,9 @@ sed -i "/jd_speed_redpocke.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//
 ## 清理日志
 sed -i "s/find.*$/find \/scripts\/logs -name '\*.log' \| grep -v 'sharecodeCollection' \| xargs -i rm -rf {}/g" $mergedListFile
 
+## 京喜红包
+sed -i "/jd_jxlhb.js/s/^.*$/# &/g" $mergedListFile
+
 ## 超级直播间
 sed -i "/jd_live_redrain.js/s/^.*$/# &/g" $mergedListFile
 if [ "$(date +%-H)" == "23" ]; then
