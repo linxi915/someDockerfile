@@ -10,7 +10,6 @@ shareCodesBeanHome="$shareCodesUrl/jd_updateBeanHome.json"
 shareCodesFactoryTuanId="$shareCodesUrl/jd_updateFactoryTuanId.json"
 shareCodesSmallHomeInviteCode="$shareCodesUrl/jd_updateSmallHomeInviteCode.json"
 
-
 ## 修改京东家庭号定时
 sed -i "/jd_family.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_family.js | awk '{print $1,$2,$3,$4,$5}')/30 6,15 * * */g" $mergedListFile
 ## 修改美丽颜究院定时
@@ -28,9 +27,6 @@ sed -i "/jd_speed_redpocke.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//
 
 ## 清理日志
 sed -i "s/find.*$/find \/scripts\/logs -name '\*.log' \| grep -v 'sharecodeCollection' \| xargs -i rm -rf {}/g" $mergedListFile
-
-## 京喜红包
-sed -i "/jd_jxlhb.js/s/^.*$/# &/g" $mergedListFile
 
 ## 超级直播间
 sed -i "/jd_live_redrain.js/s/^.*$/# &/g" $mergedListFile

@@ -35,8 +35,8 @@ function addCron() {
                 test -n "$jscron" && echo "$jscron node /scripts/$jsname >> /scripts/logs/$jsname_log.log 2>&1" >> $mergedListFile
                 test -n "$jscron" && echo $jsname
             fi
-        elif [ -n "$(grep "const helpAu = true;" /scripts/$jsname)" ]; then
-            sed -i "s/const helpAu = true;/const helpAu = false;/g" /scripts/$jsname
+        elif [ -n "$(grep "helpAu = true" /scripts/$jsname)" ]; then
+            sed -i "s/helpAu = true/helpAu = false/g" /scripts/$jsname
         fi
     done
 }
