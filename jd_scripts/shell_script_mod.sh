@@ -54,11 +54,13 @@ fi
 ## 克隆zooPanda仓库
 if [ ! -d "/zooPanda/" ]; then
     echo "未检查到zooPanda仓库脚本，初始化下载相关脚本..."
-    git clone https://github.com/zooPanda/zoo /zooPanda
+    git clone -b zoo https://github.com/Aaron-lv/sync /zooPanda
 else
     echo "更新zooPanda仓库脚本..."
+    cd /zooPanda
+    git remote set-url origin https://github.com/Aaron-lv/sync
     git -C /zooPanda reset --hard
-    git -C /zooPanda pull origin dev --rebase
+    git -C /zooPanda pull origin zoo --rebase
 fi
 
 ## 克隆passerby-b仓库
