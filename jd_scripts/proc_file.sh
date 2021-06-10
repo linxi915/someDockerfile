@@ -67,3 +67,7 @@ sed -i "s/http.*:\/\/.*\.json/$shareCodesCash/g" /scripts/jd_cash.js
 ## 618动物联萌
 sed -i "s/http.*:\/\/.*\.json/$shareCodesZoo/g" /scripts/jd_zoo.js
 sed -i "s/http:\/\/cdn.trueorfalse.top\/e528ffae31d5407aac83b8c37a4c86bc\//$shareCodesZoo/g" /scripts/jd_zoo.js
+
+
+## 关闭助力
+sed -i "s/helpAu = true/helpAu = false/g" $(grep "helpAu = true" -rl /scripts/[a-z]*_*.js)
