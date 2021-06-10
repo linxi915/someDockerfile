@@ -968,7 +968,11 @@ def parseJDCookies(headers):
                     n += 1
                 cookies_list_new.writelines(lines)
             else:
-                line = jd_cookie + "\n"
+                n = len(lines) - 1
+                if "\n" not in lines[n]:
+                    line = "\n" + jd_cookie + "\n"
+                else:
+                    line = jd_cookie + "\n"
                 lines.append(line)
                 cookies_list_new.writelines(lines)
 
