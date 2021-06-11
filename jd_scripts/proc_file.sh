@@ -44,6 +44,8 @@ sed -i "s/http.*:\/\/.*\.json/$shareCodeszz/g" /scripts/jd_syj.js
 sed -i "s/http.*:\/\/.*\.json/$shareCodesCfd/g" /scripts/jd_cfd.js
 ## 京喜农场
 sed -i "s/http.*:\/\/.*\.txt/$shareCodesJxnc/g" /scripts/jd_jxnc.js
+## 签到领现金
+sed -i "s/http.*:\/\/.*\.json/$shareCodesCash/g" /scripts/jd_cash.js
 ## 京喜领红包
 sed -i "s/http.*:\/\/.*\.json/$shareCodesJxhb/g" /scripts/jd_jxlhb.js
 ## 领京豆
@@ -54,15 +56,6 @@ sed -i "s/http.*:\/\/.*\.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFacto
 sed -i "s/http.*:\/\/.*\.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
 ## 全民开红包
 sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_red.json/$shareCodesRed/g" /scripts/jd_redPacket.js
-## 口袋书店
-sed -i "s/'28a699ac78d74aa3b31f7103597f8927@.*$/'6f46a1538969453d9a730ee299f2fc41@3ad242a50e9c4f2d9d2151aee38630b1@1a68165088b345c4ba2d8ce6464fa92b@bf4071c7fcde43828fddb83a08f53d28@abf5065d45e84851b972b37ac205e56a@3d9e58dbf2274db88afa177c7c2dccb0',/g" /scripts/jd_bookshop.js
-
-## 签到领现金
-sed_line="$(sed -n "/const inviteCodes = \[/=" /scripts/jd_cash.js)"
-line1=`expr $sed_line + 1`
-line2=`expr $sed_line + 2`
-sed -i "$line1,$line2 s/^.*$/  \`eU9Yau3kZ_4g-DiByHEQ0A@ZnQya-i1Y_UmpGzUnnEX@fkFwauq3ZA@f0JyJuW7bvQ@IhM0bu-0b_kv8W6E@eU9YKpnxOLhYtQSygTJQ@-oaWtXEHOrT_bNMMVso@eU9YG7XaD4lXsR2krgpG\`,/g" /scripts/jd_cash.js
-sed -i "s/http.*:\/\/.*\.json/$shareCodesCash/g" /scripts/jd_cash.js
 
 ## 618动物联萌
 sed -i "s/http.*:\/\/.*\.json/$shareCodesZoo/g" /scripts/jd_zoo.js
