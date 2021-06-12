@@ -1,17 +1,6 @@
 #!/bin/sh
 
 mergedListFile="/scripts/docker/merged_list_file.sh"
-shareCodesUrl="https:\/\/ghproxy.zsddns.ga\/https:\/\/raw.githubusercontent.com\/Aaron-lv\/updateTeam\/master\/shareCodes\\"
-shareCodesCfd="$shareCodesUrl/cfd.json"
-shareCodeszz="$shareCodesUrl/jd_zz.json"
-shareCodesJxnc="$shareCodesUrl/jxnc.txt"
-shareCodesJxhb="$shareCodesUrl/jxhb.json"
-shareCodesZoo="$shareCodesUrl/jd_zoo.json"
-shareCodesRed="$shareCodesUrl/jd_red.json"
-shareCodesCash="$shareCodesUrl/jd_updateCash.json"
-shareCodesBeanHome="$shareCodesUrl/jd_updateBeanHome.json"
-shareCodesFactoryTuanId="$shareCodesUrl/jd_updateFactoryTuanId.json"
-shareCodesSmallHomeInviteCode="$shareCodesUrl/jd_updateSmallHomeInviteCode.json"
 
 ## 修改京东家庭号定时
 sed -i "/jd_family.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_family.js | awk '{print $1,$2,$3,$4,$5}')/30 6,15 * * */g" $mergedListFile
@@ -39,28 +28,6 @@ fi
 
 ## 赚京豆
 sed -i "s/await getRandomCode();/\/\/&/g" /scripts/jd_syj.js
-sed -i "s/http.*:\/\/.*\.json/$shareCodeszz/g" /scripts/jd_syj.js
-## 京喜财富岛
-sed -i "s/http.*:\/\/.*\.json/$shareCodesCfd/g" /scripts/jd_cfd.js
-## 京喜农场
-sed -i "s/http.*:\/\/.*\.txt/$shareCodesJxnc/g" /scripts/jd_jxnc.js
-## 签到领现金
-sed -i "s/http.*:\/\/.*\.json/$shareCodesCash/g" /scripts/jd_cash.js
-## 京喜领红包
-sed -i "s/http.*:\/\/.*\.json/$shareCodesJxhb/g" /scripts/jd_jxlhb.js
-## 领京豆
-sed -i "s/http.*:\/\/.*\.json/$shareCodesBeanHome/g" /scripts/jd_bean_home.js
-## 京喜工厂
-sed -i "s/http.*:\/\/.*\.json/$shareCodesFactoryTuanId/g" /scripts/jd_dreamFactory.js
-## 东东小窝
-sed -i "s/http.*:\/\/.*\.json/$shareCodesSmallHomeInviteCode/g" /scripts/jd_small_home.js
-## 全民开红包
-sed -i "s/https:\/\/raw.githubusercontent.com\/gitupdate\/updateTeam\/master\/shareCodes\/jd_red.json/$shareCodesRed/g" /scripts/jd_redPacket.js
-
-## 618动物联萌
-sed -i "s/http.*:\/\/.*\.json/$shareCodesZoo/g" /scripts/jd_zoo.js
-sed -i "s/http:\/\/cdn.trueorfalse.top\/e528ffae31d5407aac83b8c37a4c86bc\//$shareCodesZoo/g" /scripts/jd_zoo.js
-
 
 ## 关闭助力
 sed -i "s/helpAu = true/helpAu = false/g" $(grep "helpAu = true" -rl /scripts/[a-z]*_*.js)
