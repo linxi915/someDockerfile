@@ -14,8 +14,6 @@ sed -i "/jd_small_home.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\
 sed -i "/jd_dreamFactory.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_dreamFactory.js | awk '{print $1,$2,$3,$4,$5}')/45 * * * */g" $mergedListFile
 ## 修改取关京东店铺商品定时
 sed -i "/jd_unsubscribe.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_unsubscribe.js | awk '{print $1,$2,$3,$4,$5}')/45 *\/6 * * */g" $mergedListFile
-## 修改京东极速版红包定时
-sed -i "/jd_speed_redpocke.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_speed_redpocke.js | awk '{print $1,$2,$3,$4,$5}')/15 0,23 * * */g" $mergedListFile
 
 ## 清理日志
 sed -i "s/find.*$/find \/scripts\/logs -name '\*.log' \| grep -v 'sharecodeCollection' \| xargs -i rm -rf {}/g" $mergedListFile
