@@ -144,8 +144,8 @@ fi
 
 ## 复制passerby-b仓库脚本到运行目录并添加定时
 if [ -d "/passerby-b/" ]; then
-    if [ -n "$(ls /passerby-b/[a-z]*_*.js)" ]; then
-        cp -f /passerby-b/[a-z]*_*.js /scripts
+    if [ -n "$(ls /passerby-b/jddj_*.js)" ]; then
+        cp -f /passerby-b/jddj_*.js /scripts
         echo -e "\n##############京东到家##############" >> $mergedListFile
         echo "添加passerby-b仓库脚本,脚本列表:"
         addCron
