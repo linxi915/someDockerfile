@@ -62,15 +62,13 @@ else
 fi
 
 ## 克隆passerby-b仓库
-if [ 0"$JDDJ_COOKIE" != "0" ]; then
-    if [ ! -d "/passerby-b/" ]; then
-        echo "未检查到passerby-b仓库脚本，初始化下载相关脚本..."
-        git clone https://github.com/passerby-b/JDDJ /passerby-b
-    else
-        echo "更新passerby-b仓库脚本..."
-        git -C /passerby-b reset --hard
-        git -C /passerby-b pull origin main --rebase
-    fi
+if [ ! -d "/passerby-b/" ]; then
+    echo "未检查到passerby-b仓库脚本，初始化下载相关脚本..."
+    git clone https://github.com/passerby-b/JDDJ /passerby-b
+else
+    echo "更新passerby-b仓库脚本..."
+    git -C /passerby-b reset --hard
+    git -C /passerby-b pull origin main --rebase
 fi
 
 ## 删除运行目录中不在定时文件里的脚本
