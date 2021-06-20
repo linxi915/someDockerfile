@@ -19,13 +19,8 @@ RUN set -ex \
         && chmod 600 /root/.ssh/id_rsa \
         && ssh-keyscan git.zhlh6.cn > /root/.ssh/known_hosts
 
-RUN git clone -b $REPO_BRANCH $REPO_URL /updateTeam_scripts \
-        && mkdir /scripts \
-        && cp /updateTeam_scripts/*.* /scripts \
-        && cd /scripts \
-        && mkdir logs \
-        && sed -i 's/"request": "^2.88.2"/&,\n    "qiniu": "^7.3.3"/g' /scripts/package.json \
-        && npm install
+RUN git clone -b $REPO_BRANCH $REPO_URL /scripts \
+        && mkdir /scripts/logs
 
 RUN mkdir /jds \
         && cd /jds \

@@ -15,7 +15,7 @@ echo "第1步将默认定时任务列表添加到合并后定时任务文件..."
 cat $defaultListFile >$mergedListFile
 
 echo "第2步执行proc_file.sh脚本任务..."
-sh -x /jds/updateTeam/proc_file.sh
+sh /jds/updateTeam/proc_file.sh
 
 echo "第3步判断是否存在自定义任务任务列表并追加..."
 if [ $CUSTOM_LIST_FILE ]; then
