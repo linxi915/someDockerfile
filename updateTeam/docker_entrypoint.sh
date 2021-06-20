@@ -22,7 +22,7 @@ if [ "$1" ]; then
     initCdn
 fi
 
-[ -f /scripts/package.json ] && before_package_json="$(cat /scripts/package.json)"
+[[ -f "/scripts/package.json" ]] && before_package_json="$(cat /scripts/package.json)"
 
 syncRepo
 if [ $? -ne 0 ]; then
@@ -31,7 +31,7 @@ else
     echo "更新仓库代码成功✅"
 fi
 
-if [ ! -d /scripts/node_modules ]; then
+if [ ! -d "/scripts/node_modules" ]; then
     echo "容器首次启动，执行npm install..."
     npm install --loglevel error --prefix /scripts
     if [ $? -ne 0 ]; then
@@ -41,7 +41,7 @@ if [ ! -d /scripts/node_modules ]; then
         echo "npm首次启动安装依赖成功✅"
     fi
 else
-    if [[ "${before_package_json}" != "$(cat /scripts/package.json)" ]]; then
+    if [ "$before_package_json" != "$(cat /scripts/package.json)" ]; then
         echo "package.json有更新，执行npm install..."
         npm install --loglevel error --prefix /scripts
         if [ $? -ne 0 ]; then
