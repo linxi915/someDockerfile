@@ -13,7 +13,7 @@ RUN set -ex \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
         && git config --global url."git@git.zhlh6.cn:".insteadOf "git@github.com:" \
-        && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/" \
+        && git config --global url."https://pd.zwc365.com/https://github.com/".insteadOf "https://github.com/" \
         && mkdir -p /root/.ssh \
         && touch /root/.ssh/id_rsa \
         && chmod 600 /root/.ssh/id_rsa \

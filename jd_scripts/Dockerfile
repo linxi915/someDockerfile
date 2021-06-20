@@ -14,7 +14,7 @@ RUN set -ex \
         && apk add --no-cache tzdata git moreutils curl jq python3 py3-pip py3-cryptography py3-numpy py-pillow \
         && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         && echo "Asia/Shanghai" > /etc/timezone \
-        && git config --global url."https://pd.zwc365.com/seturl/https://github.com/".insteadOf "https://github.com/"
+        && git config --global url."https://pd.zwc365.com/https://github.com/".insteadOf "https://github.com/"
 
 RUN git clone -b $REPO_BRANCH $REPO_URL /scripts \
         && mkdir /scripts/logs
