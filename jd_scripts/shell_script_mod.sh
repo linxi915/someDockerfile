@@ -156,7 +156,11 @@ if [ ! -d "/diy/" ]; then
 else
     if [ -n "$(ls /diy/[a-z]*.js)" ]; then
         for jsname in $(cd /diy && ls [a-z]*.js); do
-            cp -f /diy/$jsname /scripts/diy_$jsname
+            if [ -n "$(echo $jsname | grep "_")" ]; then
+                cp -f /diy/$jsname /scripts/$jsname
+            else
+                cp -f /diy/$jsname /scripts/diy_$jsname
+            fi
         done
         echo -e "\n##############挂载脚本##############" >> $mergedListFile
         echo "添加挂载脚本,脚本列表:"
