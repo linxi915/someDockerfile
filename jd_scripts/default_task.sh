@@ -146,6 +146,10 @@ else
     set -e
 fi
 
+if [ -f "/data/diy_shell.sh" ]; then
+    sh /data/diy_shell.sh
+fi
+
 echo "第5步执行 proc_file.sh 脚本任务..."
 sh /jds/jd_scripts/proc_file.sh
 
