@@ -128,7 +128,7 @@ if [ -n "$Raws" ]; then
         if [ -z "$re" ]; then
             wget -O /scripts/$js_dir_name $Raw
         else
-            Raw="$(echo $Raw | sed "s/raw.githubusercontent.com/ghproxy.zsddns.ga\/https:\/\/&/g")"
+            Raw="$(echo $Raw | sed "s/raw.githubusercontent.com/pd.zwc365.com\/https:\/\/&/g")"
             wget -O /scripts/$js_dir_name $Raw
         fi
     done
