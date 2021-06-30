@@ -9,9 +9,9 @@ function initxmly() {
     git init
     git remote add origin https://github.com/Zero-S1/xmly_speed
     git config core.sparsecheckout true
-    echo rsa >>/xmly_speed/.git/info/sparse-checkout
-    echo xmly_speed.py >>/xmly_speed/.git/info/sparse-checkout
-    echo requirements.txt >>/xmly_speed/.git/info/sparse-checkout
+    echo rsa >> /xmly_speed/.git/info/sparse-checkout
+    echo xmly_speed.py >> /xmly_speed/.git/info/sparse-checkout
+    echo requirements.txt >> /xmly_speed/.git/info/sparse-checkout
     git pull origin master --rebase
     pip3 install --upgrade pip
     pip3 install -r requirements.txt
@@ -24,7 +24,7 @@ function inithotsoon() {
     git init
     git remote add origin https://github.com/Ariszy/Private-Script
     git config core.sparsecheckout true
-    echo Scripts/hotsoon_old.js >>/hotsoon/.git/info/sparse-checkout
+    echo Scripts/hotsoon_old.js >> /hotsoon/.git/info/sparse-checkout
     git pull origin master --rebase
     wget -O /hotsoon/package.json https://pd.zwc365.com/https://raw.githubusercontent.com/Aaron-lv/sync/JavaScript/package.json
     npm install
@@ -37,10 +37,21 @@ function initziye {
     git init
     git remote add origin https://github.com/Aaron-lv/sync
     git config core.sparsecheckout true
-    echo package.json >>/ZIYE_JavaScript/.git/info/sparse-checkout
-    echo Task/*.js >>/ZIYE_JavaScript/.git/info/sparse-checkout
+    echo package.json >> /ZIYE_JavaScript/.git/info/sparse-checkout
+    echo Task/*.js >> /ZIYE_JavaScript/.git/info/sparse-checkout
     git pull origin JavaScript --rebase
     npm install
+}
+
+##小米运动
+function initxmSports {
+    mkdir /xmSports
+    cd /xmSports
+    git init
+    git remote add origin https://github.com/FKPYW/SomeScripts
+    git config core.sparsecheckout true
+    echo mimotion/mimotion.py >> /xmSports/.git/info/sparse-checkout
+    git pull origin master --rebase
 }
 
 ##判断小米运动相关变量存在，才会更新相关任务脚本
@@ -49,17 +60,18 @@ if [ 0"$XMYD_USER" = "0" ]; then
 else
     if [ ! -d "/xmSports/" ]; then
         echo "未检查到xmSports脚本相关文件，初始化下载相关脚本"
-        git clone https://github.com/FKPYW/mimotion /xmSports
+        initxmSports
     else
         echo "更新xmSports脚本相关文件"
+        git -C /xmSports remote set-url origin https://github.com/FKPYW/SomeScripts
         git -C /xmSports reset --hard
-        git -C /xmSports pull origin main --rebase
+        git -C /xmSports pull origin master --rebase
     fi
     if [ 0"$XM_CRON" = "0" ]; then
         XM_CRON="10 22 * * *"
     fi
     echo "#小米运动刷步数" >>$mergedListFile
-    echo "$XM_CRON python3 /xmSports/main.py >> /logs/xmSports.log 2>&1" >>$mergedListFile
+    echo "$XM_CRON python3 /xmSports/mimotion/mimotion.py >> /logs/xmSports.log 2>&1" >>$mergedListFile
 fi
 
 ##判断喜马拉雅极速版相关变量存在，才会更新相关任务脚本
