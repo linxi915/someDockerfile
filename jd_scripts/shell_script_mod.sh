@@ -49,18 +49,6 @@ else
     git -C /Aaron-lv pull origin master --rebase
 fi
 
-## 克隆zooPanda仓库
-if [ ! -d "/zooPanda/" ]; then
-    echo "未检查到zooPanda仓库脚本，初始化下载相关脚本..."
-    git clone -b zoo https://github.com/Aaron-lv/sync /zooPanda
-else
-    echo "更新zooPanda仓库脚本..."
-    cd /zooPanda
-    git remote set-url origin https://github.com/Aaron-lv/sync
-    git -C /zooPanda reset --hard
-    git -C /zooPanda pull origin zoo --rebase
-fi
-
 ## 克隆passerby-b仓库
 if [ ! -d "/passerby-b/" ]; then
     echo "未检查到passerby-b仓库脚本，初始化下载相关脚本..."
@@ -75,7 +63,7 @@ fi
 jsnames="$(cd /scripts && ls [a-z]*_*.js)"
 for jsname in $jsnames; do
     if [ $(grep -c "$jsname" "$mergedListFile") -eq '0' ]; then
-        if [[ "$jsname" == "jd_speed.js" || "$jsname" == "jd_crazy_joy_coin.js" ]]; then
+        if [ "$jsname" == "jd_crazy_joy_coin.js" ]; then
             continue
         else
             rm -rf /scripts/$jsname
@@ -88,16 +76,9 @@ if [ -n "$(ls /Aaron-lv/Task/[a-z]*_*.js)" ]; then
     cp -f /Aaron-lv/Task/[a-z]*_*.js /scripts
 fi
 
-## 复制zooPanda仓库脚本到运行目录
-if [ -n "$(ls /zooPanda/[a-z]*.js)" ]; then
-    for jsname in $(cd /zooPanda && ls [a-z]*.js); do
-        cp -f /zooPanda/$jsname /scripts/zooPanda_$jsname
-    done
-fi
-
 ## 删除不运行脚本
 if [ -n "$(ls /scripts/[!jA-Z]*_*.js)" ]; then
-    js_del="zooPanda_zooBrandcity&zooPanda_zooJx88hongbao&jx_cfdtx"
+    js_del="jx_cfdtx"
     arr=${js_del//&/ }
     for item in $arr; do
         rm -rf /scripts/$item.js
