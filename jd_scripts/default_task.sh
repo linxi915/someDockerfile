@@ -195,23 +195,27 @@ fi
 crontab $mergedListFile
 
 echo "第11步处理jd_crazy_joy_coin任务..."
-if [ -z "$CRZAY_JOY_COIN_ENABLE" ]; then
-   echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
-   eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-   echo '' >/scripts/logs/jd_crazy_joy_coin.log
-   $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
-   echo "默认jd_crazy_joy_coin,重启完成"
+if [ -f "/scripts/jd_crazy_joy_coin.js" ]; then
+    if [ -z "$CRZAY_JOY_COIN_ENABLE" ]; then
+        echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
+        eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
+        echo '' >/scripts/logs/jd_crazy_joy_coin.log
+        $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+        echo "默认jd_crazy_joy_coin,重启完成"
+    else
+        if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
+            echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
+            eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
+            echo '' >/scripts/logs/jd_crazy_joy_coin.log
+            $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+            echo "配置jd_crazy_joy_coin,重启完成"
+        else
+            eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
+            echo "已配置不启用jd_crazy_joy_coin任务,不处理"
+        fi
+    fi
 else
-   if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
-      echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
-      eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-      echo '' >/scripts/logs/jd_crazy_joy_coin.log
-      $CMD /scripts/jd_crazy_joy_coin.js |ts >>/scripts/logs/jd_crazy_joy_coin.log 2>&1 &
-      echo "配置jd_crazy_joy_coin,重启完成"
-   else
-      eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-      echo "已配置不启用jd_crazy_joy_coin任务,不处理"
-   fi
+    echo "脚本不存在.."
 fi
 
 echo "第12步将仓库的 docker_entrypoint.sh 脚本更新至系统 /usr/local/bin/docker_entrypoint.sh 内..."
