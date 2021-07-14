@@ -17,7 +17,10 @@ RUN set -ex \
         && git config --global url."https://pd.zwc365.com/https://github.com/".insteadOf "https://github.com/"
 
 RUN git clone -b $REPO_BRANCH $REPO_URL /scripts \
-        && mkdir /scripts/logs
+        && cd /scripts \
+        && mkdir logs \
+        && npm install --loglevel error --prefix /scripts \
+        && npm install -g pm2
 
 RUN mkdir /jds \
         && cd /jds \
