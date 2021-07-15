@@ -77,7 +77,7 @@ else
 fi
 
 echo "-------------------------------------------------执行定时任务shell脚本--------------------------------------------------"
-sh /jds/jd_scripts/default_task.sh $ENABLE_BOT_COMMAND $run_cmd
+. /jds/jd_scripts/default_task.sh $ENABLE_BOT_COMMAND $run_cmd
 if [ $? -ne 0 ]; then
     echo "定时任务shell脚本执行失败❌，exit，restart"
     exit 1

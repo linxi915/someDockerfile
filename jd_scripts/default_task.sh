@@ -13,6 +13,24 @@ function initPythonEnv() {
     python3 setup.py install
 }
 
+function run_hangup() {
+    if [ -s "$COOKIES_LIST" ]; then
+        export JD_COOKIE="$(cat $COOKIES_LIST | grep -v "#\|^$"| paste -s -d '&')"
+    fi
+    cd /scripts
+    for file in $run_file; do
+        if type pm2 > /dev/null 2>&1; then
+            [[ -n "$(pm2 list | grep $file)" ]] && pm2 stop $file 2>/dev/null
+            pm2 flush
+            pm2 start -a $file.js --watch "$file.js" --name=$file
+        else
+            eval $(ps -ef | grep "$file" | grep -v "grep" | awk '{print "kill "$1}')
+            echo '' > /scripts/logs/$file.log
+            $CMD /scripts/$file.js |ts >> /scripts/logs/$file.log 2>&1 &
+        fi
+    done
+}
+
 #启动tg bot交互前置条件成立，开始安装配置环境
 if [ "$1" == "True" ]; then
     initPythonEnv
@@ -198,16 +216,14 @@ echo "第11步处理jd_crazy_joy_coin任务..."
 if [ -f "/scripts/jd_crazy_joy_coin.js" ]; then
     if [ -z "$CRZAY_JOY_COIN_ENABLE" ]; then
         echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
-        eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-        echo '' > /scripts/logs/jd_crazy_joy_coin.log
-        $CMD /scripts/jd_crazy_joy_coin.js |ts >> /scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+        run_file="jd_crazy_joy_coin"
+        run_hangup
         echo "默认jd_crazy_joy_coin,重启完成"
     else
         if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
             echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
-            eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
-            echo '' > /scripts/logs/jd_crazy_joy_coin.log
-            $CMD /scripts/jd_crazy_joy_coin.js |ts >> /scripts/logs/jd_crazy_joy_coin.log 2>&1 &
+            run_file="jd_crazy_joy_coin"
+            run_hangup
             echo "配置jd_crazy_joy_coin,重启完成"
         else
             eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
@@ -222,16 +238,14 @@ echo "第12步处理jd_cfd_loop任务..."
 if [ -f "/scripts/jd_cfd_loop.js" ]; then
     if [ -z "$CFD_LOOP_ENABLE" ]; then
         echo "默认启用jd_cfd_loop,杀掉jd_cfd_loop任务，并重启"
-        eval $(ps -ef | grep "jd_cfd_loop" | grep -v "grep" | awk '{print "kill "$1}')
-        echo '' > /scripts/logs/jd_cfd_loop.log
-        $CMD /scripts/jd_cfd_loop.js |ts >> /scripts/logs/jd_cfd_loop.log 2>&1 &
+        run_file="jd_cfd_loop"
+        run_hangup
         echo "默认jd_cfd_loop,重启完成"
     else
         if [ "$CFD_LOOP_ENABLE" = "Y" ]; then
             echo "配置启用jd_cfd_loop,杀掉jd_cfd_loop任务，并重启"
-            eval $(ps -ef | grep "jd_cfd_loop" | grep -v "grep" | awk '{print "kill "$1}')
-            echo '' > /scripts/logs/jd_cfd_loop.log
-            $CMD /scripts/jd_cfd_loop.js |ts >> /scripts/logs/jd_cfd_loop.log 2>&1 &
+            run_file="jd_cfd_loop"
+            run_hangup
             echo "配置jd_cfd_loop,重启完成"
         else
             eval $(ps -ef | grep "jd_cfd_loop" | grep -v "grep" | awk '{print "kill "$1}')

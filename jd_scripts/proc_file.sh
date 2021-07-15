@@ -21,6 +21,3 @@ sed -i "/jd_live_redrain.js/s/^.*$/# &/g" $mergedListFile
 if [ "$(date +%-H)" == "23" ]; then
    sed -i "/jd_super_redrain.js/s/$(sed "s/\*/\\\*/g" $mergedListFile | sed "s/\//\\\\\//g" | grep jd_super_redrain.js | awk '{print $1,$2,$3,$4,$5}')/0,1 0-23\/1 * * */g" $mergedListFile
 fi
-
-## 关闭助力
-sed -i "s/helpAu = true/helpAu = false/g" $(grep "helpAu = true" -rl /scripts/[a-z]*_*.js)
