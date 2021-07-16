@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 function initPythonEnv() {
     echo "开始安装运行jd_bot需要的python环境及依赖..."
@@ -29,7 +28,7 @@ function run_hangup() {
         cd /scripts
         for file in $run_file; do
             if type pm2 > /dev/null 2>&1; then
-                [[ -n "$(pm2 list | grep $file)" ]] && pm2 stop $file 2>/dev/null
+                pm2 stop $file 2>/dev/null
                 pm2 flush
                 pm2 start -a $file.js --watch "$file.js" --name=$file
             else
@@ -90,14 +89,12 @@ if [ -n "$CUSTOM_LIST_FILE" ]; then
                 wget -O $customListFile $CUSTOM_LIST_FILE
             fi
         }
-        set +e
         customList
         if [ $? -ne 0 ]; then
             echo "更新自定义定时任务列表出错❌，跳过"
         else
             echo "更新自定义定时任务列表成功✅"
         fi
-        set -e
     elif [ -f "/scripts/docker/$CUSTOM_LIST_FILE" ]; then
         echo "自定义任务文件为本地挂载。"
         cp -f /scripts/docker/$CUSTOM_LIST_FILE $customListFile
@@ -137,7 +134,6 @@ echo "第4步判断是否配置自定义shell脚本..."
 if [ 0"$CUSTOM_SHELL_FILE" = "0" ]; then
     echo "未配置自定shell脚本文件，跳过执行。"
 else
-    set +e
     if expr "$CUSTOM_SHELL_FILE" : 'http.*' &>/dev/null; then
         echo "自定义shell脚本为远程脚本，开始下载自定义远程脚本..."
         function customShell() {
@@ -170,7 +166,6 @@ else
             echo "挂载的自定shell脚本，执行结束。"
         fi
     fi
-    set -e
 fi
 
 if [ -f "/data/diy_shell.sh" ]; then
