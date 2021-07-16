@@ -14,34 +14,44 @@ function initPythonEnv() {
 }
 
 function run_hangup() {
-    if [ -s "$COOKIES_LIST" ]; then
-        export JD_COOKIE="$(cat $COOKIES_LIST | grep -v "#\|^$"| paste -s -d '&')"
-    fi
-    cd /scripts
-    for file in $run_file; do
-        if type pm2 > /dev/null 2>&1; then
-            [[ -n "$(pm2 list | grep $file)" ]] && pm2 stop $file 2>/dev/null
-            pm2 flush
-            pm2 start -a $file.js --watch "$file.js" --name=$file
+    if [[ -s "$COOKIES_LIST" && -f "/usr/local/bin/spnode" ]]; then
+        if [ -z "$CFD_LOOP_NUM" ]; then
+            export JD_COOKIE="$(cat $COOKIES_LIST | grep -v "#\|^$"| paste -s -d '&')"
         else
-            eval $(ps -ef | grep "$file" | grep -v "grep" | awk '{print "kill "$1}')
-            echo '' > /scripts/logs/$file.log
-            $CMD /scripts/$file.js |ts >> /scripts/logs/$file.log 2>&1 &
+            export JD_COOKIE="$(cat $COOKIES_LIST | head -n $CFD_LOOP_NUM | grep -v "#\|^$"| paste -s -d '&')"
         fi
-    done
+    elif [[ 0"$JD_COOKIE" != "0" && ! -f "/usr/local/bin/spnode" ]]; then
+        if [ -n "$CFD_LOOP_NUM" ]; then
+            export JD_COOKIE="$(echo $JD_COOKIE | sed "s/[ &]/\\n/g" | sed "/^$/d" | head -n $CFD_LOOP_NUM | grep -v "#\|^$"| paste -s -d '&')"
+        fi
+    fi
+    if [ 0"$JD_COOKIE" != "0" ]; then
+        cd /scripts
+        for file in $run_file; do
+            if type pm2 > /dev/null 2>&1; then
+                [[ -n "$(pm2 list | grep $file)" ]] && pm2 stop $file 2>/dev/null
+                pm2 flush
+                pm2 start -a $file.js --watch "$file.js" --name=$file
+            else
+                eval $(ps -ef | grep "$file" | grep -v "grep" | awk '{print "kill "$1}')
+                echo '' > /scripts/logs/$file.log
+                $CMD /scripts/$file.js |ts >> /scripts/logs/$file.log 2>&1 &
+            fi
+        done
+    else
+        echo "未添加COOKIE不启用挂机"
+    fi
 }
 
 #启动tg bot交互前置条件成立，开始安装配置环境
 if [ "$1" == "True" ]; then
     initPythonEnv
-
     if [ -z "$DISABLE_SPNODE" ]; then
         cp -f /jds/jd_scripts/shell_spnode.sh /usr/local/bin/spnode
         chmod +x /usr/local/bin/spnode
     fi
-
     echo "spnode需要使用，cookie写入文件，该文件同时也为jd_bot扫码自动获取cookie服务"
-    if [ -z "$JD_COOKIE" ]; then
+    if [ 0"$JD_COOKIE" == "0" ]; then
         if [ ! -f "$COOKIES_LIST" ]; then
             echo "" > $COOKIES_LIST
             echo "未配置JD_COOKIE环境变量，$COOKIES_LIST 文件已生成,请将cookies写入 $COOKIES_LIST 文件，格式每个Cookie一行"
@@ -51,10 +61,9 @@ if [ "$1" == "True" ]; then
             echo "cookies.conf文件已经存在跳过,如果需要更新cookie请修改 $COOKIES_LIST 文件内容"
         else
             echo "环境变量 cookies写入 $COOKIES_LIST 文件,如果需要更新cookie请修改cookies.conf文件内容"
-            echo $JD_COOKIE | sed "s/[ &]/\\n/g" | sed "/^$/d" >$COOKIES_LIST
+            echo $JD_COOKIE | sed "s/[ &]/\\n/g" | sed "/^$/d" > $COOKIES_LIST
         fi
     fi
-
 fi
 
 echo "定义定时任务合并处理用到的文件路径..."
@@ -215,16 +224,12 @@ crontab $mergedListFile
 echo "第11步处理jd_crazy_joy_coin任务..."
 if [ -f "/scripts/jd_crazy_joy_coin.js" ]; then
     if [ -z "$CRZAY_JOY_COIN_ENABLE" ]; then
-        echo "默认启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
         run_file="jd_crazy_joy_coin"
         run_hangup
-        echo "默认jd_crazy_joy_coin,重启完成"
     else
         if [ "$CRZAY_JOY_COIN_ENABLE" = "Y" ]; then
-            echo "配置启用jd_crazy_joy_coin,杀掉jd_crazy_joy_coin任务，并重启"
             run_file="jd_crazy_joy_coin"
             run_hangup
-            echo "配置jd_crazy_joy_coin,重启完成"
         else
             eval $(ps -ef | grep "jd_crazy_joy_coin" | grep -v "grep" | awk '{print "kill "$1}')
             echo "已配置不启用jd_crazy_joy_coin任务,不处理"
@@ -237,16 +242,12 @@ fi
 echo "第12步处理jd_cfd_loop任务..."
 if [ -f "/scripts/jd_cfd_loop.js" ]; then
     if [ -z "$CFD_LOOP_ENABLE" ]; then
-        echo "默认启用jd_cfd_loop,杀掉jd_cfd_loop任务，并重启"
         run_file="jd_cfd_loop"
         run_hangup
-        echo "默认jd_cfd_loop,重启完成"
     else
         if [ "$CFD_LOOP_ENABLE" = "Y" ]; then
-            echo "配置启用jd_cfd_loop,杀掉jd_cfd_loop任务，并重启"
             run_file="jd_cfd_loop"
             run_hangup
-            echo "配置jd_cfd_loop,重启完成"
         else
             eval $(ps -ef | grep "jd_cfd_loop" | grep -v "grep" | awk '{print "kill "$1}')
             echo "已配置不启用jd_cfd_loop任务,不处理"
