@@ -77,7 +77,7 @@ if [ -n "$(ls /Aaron-lv/Task/[a-z]*_*.js)" ]; then
 fi
 
 ## 删除不运行脚本
-if [ -n "$(ls /scripts/[!jA-Z]*_*.js)" ]; then
+if [ -n "$(ls /scripts/[!A-Z]*_*.js)" ]; then
     js_del="jx_cfdtx"
     arr=${js_del//&/ }
     for item in $arr; do
