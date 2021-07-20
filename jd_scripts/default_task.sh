@@ -179,7 +179,7 @@ echo "第6步判断是否配置了随即延迟参数..."
 if [ -n "$RANDOM_DELAY_MAX" ]; then
     if [ "$RANDOM_DELAY_MAX" -ge "1" ]; then
         echo "已设置随机延迟为 $RANDOM_DELAY_MAX , 设置延迟任务中..."
-        sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car.js\|jd_car_exchange.js\|jd_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_xtg_help.js\|jd_big_winner.js$MY_RANDOM/!s/node/sleep \$((RANDOM % $RANDOM_DELAY_MAX)); node/g" $mergedListFile
+        sed -i "/jd_bean_sign.js\|jd_blueCoin.js\|jd_joy_reward.js\|jd_joy_steal.js\|jd_joy_feedPets.js\|jd_car.js\|jd_car_exchange.js\|jd_shop_sign.js\|jd_super_redrain.js\|jd_half_redrain.js\|jd_super_mh.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_xtg_help.js\|jd_big_winner.js\|jd_cfdtx.js$MY_RANDOM/!s/node/sleep \$((RANDOM % $RANDOM_DELAY_MAX)); node/g" $mergedListFile
     fi
 else
     echo "未配置随即延迟对应的环境变量，故不设置延迟任务..."
@@ -209,7 +209,7 @@ echo "第10步加载最新的定时任务文件..."
 if [[ -f "/usr/bin/jd_bot" && -z "$DISABLE_SPNODE" ]]; then
     echo "bot交互与spnode前置条件成立，替换任务列表的 node 指令为 spnode "
     sed -i "s/ node / spnode /g" $mergedListFile
-    sed -i "/jd_blueCoin.js\|jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js/s/spnode/spnode conc/g" $mergedListFile
+    sed -i "/jd_blueCoin.js\|jd_joy_reward.js\|jd_carnivalcity.js\|jd_xtg.js\|jd_cfdtx.js/s/spnode/spnode conc/g" $mergedListFile
     CMD="spnode"
 else
     CMD="node"
