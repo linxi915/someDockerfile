@@ -38,7 +38,7 @@ fi
 ## 更新抢京豆邀请码
 if [ "$jd_updateBeanHome_ENABLE" = "Y" ]; then
     echo "# 更新抢京豆邀请码" >> $mergedListFile
-    echo "0 0,2 * * * cd /scripts && node jd_updateBeanHome.js >> logs/jd_updateBeanHome.log 2>&1 && upload >> logs/upload_jd_updateBeanHome.log 2>&1" >> $mergedListFile
+    echo "0 0,6 * * * cd /scripts && node jd_updateBeanHome.js >> logs/jd_updateBeanHome.log 2>&1 && upload >> logs/upload_jd_updateBeanHome.log 2>&1" >> $mergedListFile
 fi
 
 ## 京东签到领现金
@@ -50,13 +50,13 @@ fi
 ## 京喜财富岛
 if [ "$jd_updateCfd_ENABLE" = "Y" ]; then
     echo "# 京喜财富岛" >> $mergedListFile
-    echo "1-3 0,7 * * * cd /scripts && node jd_updateCfd.js >> logs/jd_updateCfd.log 2>&1 && upload >> logs/upload_jd_updateCfd.log 2>&1" >> $mergedListFile
+    echo "1-3 0,6 * * * cd /scripts && node jd_updateCfd.js >> logs/jd_updateCfd.log 2>&1 && upload >> logs/upload_jd_updateCfd.log 2>&1" >> $mergedListFile
 fi
 
 ## 全民开红包
 if [ "$jd_updateRed_ENABLE" = "Y" ]; then
     echo "# 全民开红包" >> $mergedListFile
-    echo "0 0,2 * * * cd /scripts && node jd_updateRed.js >> logs/jd_updateRed.log 2>&1 && upload >> logs/upload_jd_updateRed.log 2>&1" >> $mergedListFile
+    echo "0 0,6 * * * cd /scripts && node jd_updateRed.js >> logs/jd_updateRed.log 2>&1 && upload >> logs/upload_jd_updateRed.log 2>&1" >> $mergedListFile
 fi
 
 ## 更新东东小窝邀请码
